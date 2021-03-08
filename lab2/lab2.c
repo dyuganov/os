@@ -2,19 +2,20 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 extern char *tzname[];
 
 int main() {
-    if(putenv("TZ=America/Los_Angeles")){
-        printf("putenv error\n");
-        exit(0);
+    const int putenvResult = putenv("TZ=America/Los_Angeles");
+    const int PUTENV_SUCCESS = 0;
+    if(putenvResult != PUTENV_SUCCESS){
+        perror("Set TZ error.");
+        return EXIT_FAILURE;
     }
 
     time_t now; // перемнная time_t хранит разницу в секундах между
-    struct tm *sp; //
-    (void) time( &now ); // time сохраняет время в секундах от 1 января 1970
-    printf("%s", ctime( &now ) ); // переводит время в локальное
+    struct tm *sp;
+    (void) time(&now); // time сохраняет время в секундах от 1 января 1970
+    printf("%s", ctime(&now)); // переводит время в локальное
     sp = localtime(&now); // корректирует время в соответствии с основным часовым поясом
 
     printf("%d/%d/%02d %d:%02d %s\n",
