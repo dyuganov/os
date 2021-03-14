@@ -5,17 +5,17 @@
 #include <stdlib.h>
 
 void openAndCloseFile(const char* fileName){
-	FILE* file;
+	FILE* file = NULL;
 	file = fopen(fileName, "r");
 	if (file == NULL){
-		perror("Can't open file.");
+		perror("Can't open file");
 		return;
 	}
 
 	const int resultFclose = fclose(file);
   const int FCLOSE_SUCCESS = 0;
 	if (resultFclose != FCLOSE_SUCCESS){
-		perror("Fclose error.");
+		perror("Fclose error");
 		return;
 	}
 }
@@ -24,9 +24,9 @@ int main(int argc, char **argv){
 	printf("Real user ID %ld \n", getuid());
 	printf("Effective user ID %ld \n", geteuid());
 
-  const int ARGC_CORRECT_VAL = 2;
-	if (argc != ARGC_CORRECT_VAL) {
-		perror("Need file.");
+  const int ARGC_CORRECT = 2;
+	if (argc != ARGC_CORRECT) {
+		perror("Need file");
 		return EXIT_FAILURE;
 	}
 
