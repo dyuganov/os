@@ -13,7 +13,7 @@ void openAndCloseFile(const char* fileName){
 	}
 
 	const int resultFclose = fclose(file);
-  const int FCLOSE_SUCCESS = 0;
+  	const int FCLOSE_SUCCESS = 0;
 	if (resultFclose != FCLOSE_SUCCESS){
 		perror("Fclose error");
 		return;
@@ -24,7 +24,7 @@ int main(int argc, char **argv){
 	printf("Real user ID %ld \n", getuid());
 	printf("Effective user ID %ld \n", geteuid());
 
-  const int ARGC_CORRECT = 2;
+  	const int ARGC_CORRECT = 2;
 	if (argc != ARGC_CORRECT) {
 		perror("Need file");
 		return EXIT_FAILURE;
