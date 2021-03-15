@@ -1,5 +1,7 @@
 struct node;
 typedef struct node Node;
-Node* initList();
+struct list;
+typedef struct list List;
+/*Node* initList();
 void freeNode(Node* currentNode);
-Node* addString(char *newLine);
+void addNode(char *newLine);*/
