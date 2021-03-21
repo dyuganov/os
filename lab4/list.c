@@ -14,7 +14,6 @@ struct list{
     Node* last;
 };
 
-// добавить прокерку при использовании
 Node* createNode(){
     Node* head = (Node*)malloc(sizeof(Node));
     if(head == NULL){
@@ -30,18 +29,16 @@ void freeNode(Node* currentNode){
     free(currentNode);
 }
 
-// добавить проверку при использовании
 List* createList(){
     List* newList = (List*)malloc(sizeof(List));
     if(newList == NULL){
         perror("List creation error");
     }
-    newList->head = createNode();
-    newList->last = newList->head;
+    newList->head = NULL;
+    newList->last = NULL;
     return newList;
 }
 
-// добавить проверку при использовании
 char* createString(unsigned int length){
     char* newString = (char*)malloc(length * sizeof(char));
     if(newString == NULL){
@@ -67,8 +64,14 @@ int addString(List* list, const char* newLine){
     }
     strcpy(newNode->value, newLine);
     newNode->next = NULL;
-    list->last->next = newNode;
-    list->last = newNode;
+    if(list->head == NULL){
+        list->head = newNode;
+        list->last = newNode;
+    }
+    else{
+        list->last->next = newNode;
+        list->last = newNode;
+    }
     return EXIT_SUCCESS;
 }
 
@@ -79,7 +82,6 @@ void deleteList(List* list){
     while (currentNode != NULL) {
         nextNode = currentNode->next;
         freeNode(currentNode);
-        currentNode = NULL;
         currentNode = nextNode;
     }
     free(list->head);

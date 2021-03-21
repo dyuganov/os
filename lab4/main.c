@@ -26,7 +26,6 @@ int main() {
 
     printf("Your lines: \n");
     printList(list);
-
     deleteList(list);
     return EXIT_SUCCESS;
 }
