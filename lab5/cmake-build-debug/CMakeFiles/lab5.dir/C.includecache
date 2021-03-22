@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/Dyuga/Desktop/study_labs/os/lab5/main.c
+stdio.h
+-
+stdlib.h
+-
+sys/types.h
+-
+string.h
+-
+fcntl.h
+-
+
