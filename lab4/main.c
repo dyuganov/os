@@ -6,10 +6,14 @@ int main() {
     const int BUF_SIZE = 100;
     char line[BUF_SIZE];
     List* list = createList();
+    if(list == NULL){
+      perror("Can't create list");
+      return EXIT_FAILURE;
+    }
 
     printf("Enter lines. Put '.' to the line beginning to exit. \n");
     const char READ_STOP_SIGN = '.';
-    while (gets(line) != NULL){
+    while (fgets(line, BUF_SIZE, stdin)){
         if(line[0] == READ_STOP_SIGN){
             break;
         }
