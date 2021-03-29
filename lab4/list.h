@@ -1,6 +1,3 @@
-#define MALLOC_FAIL (-1)
-#define NULL_POINTER_ARGUMENT (-2)
-
 struct node;
 typedef struct node Node;
 struct list;

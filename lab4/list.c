@@ -18,6 +18,7 @@ Node* createNode(){
     Node* head = (Node*)malloc(sizeof(Node));
     if(head == NULL){
         perror("Node creation error");
+        return NULL;
     }
     head->next = NULL;
     head->value = NULL;
@@ -33,6 +34,7 @@ List* createList(){
     List* newList = (List*)malloc(sizeof(List));
     if(newList == NULL){
         perror("List creation error");
+        return NULL;
     }
     newList->head = NULL;
     newList->last = NULL;
@@ -43,24 +45,26 @@ char* createString(unsigned int length){
     char* newString = (char*)malloc(length * sizeof(char));
     if(newString == NULL){
         perror("String creation error");
+        return NULL;
     }
+    return newString;
 }
 
 int addString(List* list, const char* newLine){
     if(list == NULL) {
         perror("AddString error. List ptr is NULL");
-        return NULL_POINTER_ARGUMENT;
+        return EXIT_FAILURE;
     }
     Node* newNode = NULL;
     newNode = createNode();
     if(newNode == NULL) {
         perror("Node creation error");
-        return MALLOC_FAIL;
+        return EXIT_FAILURE;
     }
     newNode->value = createString(strlen(newLine) + 1);
     if(newNode == NULL) {
         perror("AddNode error");
-        return MALLOC_FAIL;
+        return EXIT_FAILURE;
     }
     strcpy(newNode->value, newLine);
     newNode->next = NULL;

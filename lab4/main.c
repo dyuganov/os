@@ -13,18 +13,19 @@ int main() {
 
     printf("Enter lines. Put '.' to the line beginning to exit. \n");
     const char READ_STOP_SIGN = '.';
-    while (fgets(line, BUF_SIZE, stdin)){
+    char* fgetsResult = NULL;
+    int errFlag = 0;
+    while (1){
+        fgetsResult = fgets(line, BUF_SIZE, stdin);
+        if(fgetsResult == NULL){
+            break;
+        }
         if(line[0] == READ_STOP_SIGN){
             break;
         }
         int addStringResult = addString(list, line);
-        if(addStringResult == MALLOC_FAIL){
-            perror("List addString error");
-            deleteList(list);
-            return EXIT_FAILURE;
-        } else if(addStringResult == NULL_POINTER_ARGUMENT){
-            deleteList(list);
-            return EXIT_FAILURE;
+        if(addStringResult == EXIT_FAILURE){
+            break;
         }
     }
 
