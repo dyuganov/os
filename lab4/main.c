@@ -3,7 +3,6 @@
 #include "list.h"
 
 int main() {
-    const int BUF_SIZE = 100;
     char line[BUF_SIZE];
     List* list = createList();
     if(list == NULL){
@@ -14,7 +13,6 @@ int main() {
     printf("Enter lines. Put '.' to the line beginning to exit. \n");
     const char READ_STOP_SIGN = '.';
     char* fgetsResult = NULL;
-    int errFlag = 0;
     while (1){
         fgetsResult = fgets(line, BUF_SIZE, stdin);
         if(fgetsResult == NULL){

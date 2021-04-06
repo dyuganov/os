@@ -61,12 +61,13 @@ int addString(List* list, const char* newLine){
         perror("Node creation error");
         return EXIT_FAILURE;
     }
-    newNode->value = createString(strlen(newLine) + 1);
+    int strLength = strnlen(newLine, BUF_SIZE) + 1;
+    newNode->value = createString(strLength);
     if(newNode == NULL) {
         perror("AddNode error");
         return EXIT_FAILURE;
     }
-    strcpy(newNode->value, newLine);
+    strncpy(newNode->value, newLine, strLength);
     newNode->next = NULL;
     if(list->head == NULL){
         list->head = newNode;

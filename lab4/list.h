@@ -1,3 +1,5 @@
+#define BUF_SIZE 100
+
 struct node;
 typedef struct node Node;
 struct list;
