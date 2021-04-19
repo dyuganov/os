@@ -75,8 +75,7 @@ int isStop(int lineNumber){
     return lineNumber == 0;
 }
 
-
-
+// todo: add time check
 void printStringsToUser(const int fileDescriptor, const off_t* offsets, const size_t* lineLength, const size_t linesNum){
     if(linesNum < 1) return;
 
@@ -85,7 +84,7 @@ void printStringsToUser(const int fileDescriptor, const off_t* offsets, const si
     int scanfResult = 0;
     int lineNumber = 0;
 
-    while(1){
+    while(TIME_NOT_OUT){
         printf("Enter string number\n");
         scanfResult = scanf("%d", &lineNumber);
         if(isStop(lineNumber)) return;

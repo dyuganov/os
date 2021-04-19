@@ -9,6 +9,10 @@
 C:/Users/Dyuga/Desktop/study_labs/os/lab5/FileStrSearch.c
 FileStrSearch.h
 C:/Users/Dyuga/Desktop/study_labs/os/lab5/FileStrSearch.h
+
+C:/Users/Dyuga/Desktop/study_labs/os/lab5/FileStrSearch.h
+sys/types.h
+-
 stdio.h
 -
 stdlib.h
@@ -17,8 +21,6 @@ string.h
 -
 fcntl.h
 -
-
-C:/Users/Dyuga/Desktop/study_labs/os/lab5/FileStrSearch.h
-sys/types.h
+unistd.h
 -
 

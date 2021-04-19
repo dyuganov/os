@@ -1,10 +1,5 @@
 #include "FileStrSearch.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-
 int isCorrectLineNum(const size_t lineNumber, const size_t linesNum){
     return (lineNumber > 0) && (lineNumber <= TABLE_SIZE) && (lineNumber <= linesNum);
 }
@@ -78,8 +73,9 @@ int isStop(int lineNumber){
 void printStringsToUser(const int fileDescriptor, const off_t* offsets, const size_t* lineLength, const size_t linesNum){
     if(linesNum < 1) return;
 
-    const size_t strBufSize = findLongestStrSize(lineLength);
-    char currStrBuf[strBufSize];
+    const size_t strBufSize = findLongestStrSize(lineLength) + 1;
+    //char currStrBuf[strBufSize];
+    //char* currStrBuf = malloc(sizeof(char) * strBufSize);
     int scanfResult = 0;
     int lineNumber = 0;
 
@@ -88,8 +84,8 @@ void printStringsToUser(const int fileDescriptor, const off_t* offsets, const si
         scanfResult = scanf("%d", &lineNumber);
         if(isStop(lineNumber)) return;
         if(scanfResult != 0 && isCorrectLineNum(lineNumber, linesNum)){
+            char currStrBuf[strBufSize];
             lseek(fileDescriptor, offsets[lineNumber-1], SEEK_SET);
-            memset(currStrBuf, 0, strlen(currStrBuf));
             read(fileDescriptor, currStrBuf, lineLength[lineNumber - 1]);
             printf("Your line: %s\n", currStrBuf);
         }

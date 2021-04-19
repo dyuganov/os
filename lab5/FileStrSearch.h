@@ -1,6 +1,11 @@
 #pragma once
 
 #include <sys/types.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 #define FILE_OPEN_FAIL (-1)
 #define TABLE_SIZE (250)
