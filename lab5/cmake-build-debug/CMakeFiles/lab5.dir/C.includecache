@@ -6,15 +6,19 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/Dyuga/Desktop/study_labs/os/lab5/main.c
+C:/Users/Dyuga/Desktop/study_labs/os/lab5/FileStrSearch.c
+FileStrSearch.h
+C:/Users/Dyuga/Desktop/study_labs/os/lab5/FileStrSearch.h
 stdio.h
 -
 stdlib.h
 -
-sys/types.h
--
 string.h
 -
 fcntl.h
+-
+
+C:/Users/Dyuga/Desktop/study_labs/os/lab5/FileStrSearch.h
+sys/types.h
 -
 

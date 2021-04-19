@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/lab5.dir/FileStrSearch.c.obj"
   "CMakeFiles/lab5.dir/main.c.obj"
   "lab5.exe"
   "lab5.exe.manifest"

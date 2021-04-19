@@ -141,6 +141,33 @@ lab5/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab5.dir\build.make CMakeFiles/lab5.dir/build
 .PHONY : lab5/fast
 
+FileStrSearch.obj: FileStrSearch.c.obj
+
+.PHONY : FileStrSearch.obj
+
+# target to build an object file
+FileStrSearch.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab5.dir\build.make CMakeFiles/lab5.dir/FileStrSearch.c.obj
+.PHONY : FileStrSearch.c.obj
+
+FileStrSearch.i: FileStrSearch.c.i
+
+.PHONY : FileStrSearch.i
+
+# target to preprocess a source file
+FileStrSearch.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab5.dir\build.make CMakeFiles/lab5.dir/FileStrSearch.c.i
+.PHONY : FileStrSearch.c.i
+
+FileStrSearch.s: FileStrSearch.c.s
+
+.PHONY : FileStrSearch.s
+
+# target to generate assembly for a file
+FileStrSearch.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab5.dir\build.make CMakeFiles/lab5.dir/FileStrSearch.c.s
+.PHONY : FileStrSearch.c.s
+
 main.obj: main.c.obj
 
 .PHONY : main.obj
@@ -177,6 +204,9 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... lab5
+	@echo ... FileStrSearch.obj
+	@echo ... FileStrSearch.i
+	@echo ... FileStrSearch.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

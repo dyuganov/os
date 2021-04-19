@@ -74,6 +74,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="C:/Users/Dyuga/Desktop/study_labs/os/lab5/FileStrSearch.c">
+			<Option target="lab5"/>
+		</Unit>
+		<Unit filename="C:/Users/Dyuga/Desktop/study_labs/os/lab5/FileStrSearch.h">
+			<Option target="lab5"/>
+		</Unit>
 		<Unit filename="C:/Users/Dyuga/Desktop/study_labs/os/lab5/main.c">
 			<Option target="lab5"/>
 		</Unit>
