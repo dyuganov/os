@@ -58,9 +58,9 @@ size_t createOffsetTable(off_t* offsets, size_t* lineLength, const int fileDescr
     return linesNum;
 }
 
-size_t findLongestStrSize(const size_t* lineLength){
-    size_t max = 0;
-    for (size_t i = 0; i < TABLE_SIZE; ++i){
+size_t findLongestStrSize(const size_t* lineLength, const size_t linesNum){
+    int max = 0;
+    for (size_t i = 0; i < linesNum; ++i){
         if(lineLength[i] > max) max = lineLength[i];
     }
     return max;
@@ -72,13 +72,9 @@ int isStop(int lineNumber){
 
 void printStringsToUser(const int fileDescriptor, const off_t* offsets, const size_t* lineLength, const size_t linesNum){
     if(linesNum < 1) return;
-
-    const size_t strBufSize = findLongestStrSize(lineLength) + 1;
-    //char currStrBuf[strBufSize];
-    //char* currStrBuf = malloc(sizeof(char) * strBufSize);
+    const size_t strBufSize = findLongestStrSize(lineLength, linesNum)+1;
     int scanfResult = 0;
     int lineNumber = 0;
-
     while(1){
         printf("Enter string number\n");
         scanfResult = scanf("%d", &lineNumber);

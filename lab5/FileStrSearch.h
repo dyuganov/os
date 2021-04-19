@@ -20,7 +20,7 @@
 
 int isCorrectLineNum(size_t lineNumber, size_t linesNum);
 void initTable(void* table, int value);
-size_t findLongestStrSize(const size_t* lineLength);
+size_t findLongestStrSize(const size_t* lineLength, size_t linesNum);
 int openFile(const char* fileName);
 int closeFile(int fileDescriptor);
 size_t createOffsetTable(off_t* offsets, size_t* lineLength, int fileDescriptor);
