@@ -39,7 +39,7 @@ size_t createOffsetTable(off_t* offsets, size_t* lineLength, const int fileDescr
     long lseekResult = 0;
 
     offsets[0] = lseek(fileDescriptor, 0L, SEEK_CUR);
-    while (1){
+    while (NUM_NOT_NULL){
         readResult = read(fileDescriptor, &tmp, READ_CNT);
         if(readResult == READ_END) break;
         if(tmp == END_LINE_CHAR || tmp == EOF){

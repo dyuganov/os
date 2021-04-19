@@ -11,6 +11,7 @@
 #define FILE_ARG_IDX (1)
 #define FILE_CLOSE_FAIL (-1)
 #define READ_CNT (1)
+#define NUM_NOT_NULL (1)
 
 int isCorrectLineNum(size_t lineNumber, size_t linesNum);
 void initTable(void* table, int value);
