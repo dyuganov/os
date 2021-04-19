@@ -17,6 +17,8 @@
 #define FILE_CLOSE_FAIL (-1)
 #define READ_CNT (1)
 #define NUM_NOT_NULL (1)
+#define LLINT 0
+#define LINE_NUM_SIZE 100
 
 int isCorrectLineNum(size_t lineNumber, size_t linesNum);
 void initTable(void* table, int value);
@@ -25,3 +27,4 @@ int openFile(const char* fileName);
 int closeFile(int fileDescriptor);
 size_t createOffsetTable(off_t* offsets, size_t* lineLength, int fileDescriptor);
 void printStringsToUser(int fileDescriptor, const off_t* offsets, const size_t* lineLength, size_t linesNum);
+long long getLineNum();

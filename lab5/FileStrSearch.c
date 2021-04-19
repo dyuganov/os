@@ -71,16 +71,23 @@ int isStop(int lineNumber){
     return lineNumber == 0;
 }
 
+long long getLineNum(){
+    char lineNumber[LINE_NUM_SIZE];
+    char* endPtr = NULL;
+    int scanfResult = scanf("%s", lineNumber);
+    if(scanfResult == 0) return 0;
+    return strtoll(lineNumber, &endPtr, LLINT);
+}
+
 void printStringsToUser(const int fileDescriptor, const off_t* offsets, const size_t* lineLength, const size_t linesNum){
     if(linesNum < 1) return;
-    const size_t strBufSize = findLongestStrSize(lineLength, linesNum) + 1;
-    int scanfResult = 0;
-    int lineNumber = 0;
+    const size_t strBufSize = findLongestStrSize(lineLength, linesNum);
+    long long lineNumber = 0;
     while(1){
         printf("Enter string number\n");
-        scanfResult = scanf("%d", &lineNumber);
+        lineNumber = getLineNum();
         if(isStop(lineNumber)) return;
-        if(scanfResult != 0 && isCorrectLineNum(lineNumber, linesNum)){
+        if(isCorrectLineNum(lineNumber, linesNum)){
             char currStrBuf[strBufSize];
             memset(currStrBuf, 0, strBufSize);
             lseek(fileDescriptor, offsets[lineNumber-1], SEEK_SET);
