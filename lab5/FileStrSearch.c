@@ -55,11 +55,12 @@ size_t createOffsetTable(off_t* offsets, size_t* lineLength, const int fileDescr
             return 0;
         }
     }
+
     return linesNum;
 }
 
 size_t findLongestStrSize(const size_t* lineLength, const size_t linesNum){
-    int max = 0;
+    long long max = 0;
     for (size_t i = 0; i < linesNum; ++i){
         if(lineLength[i] > max) max = lineLength[i];
     }
@@ -72,7 +73,7 @@ int isStop(int lineNumber){
 
 void printStringsToUser(const int fileDescriptor, const off_t* offsets, const size_t* lineLength, const size_t linesNum){
     if(linesNum < 1) return;
-    const size_t strBufSize = findLongestStrSize(lineLength, linesNum)+1;
+    const size_t strBufSize = findLongestStrSize(lineLength, linesNum) + 1;
     int scanfResult = 0;
     int lineNumber = 0;
     while(1){
@@ -81,6 +82,7 @@ void printStringsToUser(const int fileDescriptor, const off_t* offsets, const si
         if(isStop(lineNumber)) return;
         if(scanfResult != 0 && isCorrectLineNum(lineNumber, linesNum)){
             char currStrBuf[strBufSize];
+            memset(currStrBuf, 0, strBufSize);
             lseek(fileDescriptor, offsets[lineNumber-1], SEEK_SET);
             read(fileDescriptor, currStrBuf, lineLength[lineNumber - 1]);
             printf("Your line: %s\n", currStrBuf);
