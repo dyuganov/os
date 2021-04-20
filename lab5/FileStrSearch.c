@@ -76,19 +76,21 @@ long long getLineNum(){
     char* endPtr = NULL;
     int scanfResult = scanf("%s", lineNumber);
     if(scanfResult == 0) return 0;
-    return strtoll(lineNumber, &endPtr, LLINT);
+    long long result = strtoll(lineNumber, &endPtr, LLINT);
+    printf("strtoll res: %lld\n", result);
+    return result;
 }
 
 void printStringsToUser(const int fileDescriptor, const off_t* offsets, const size_t* lineLength, const size_t linesNum){
     if(linesNum < 1) return;
     const size_t strBufSize = findLongestStrSize(lineLength, linesNum);
     long long lineNumber = 0;
+    char currStrBuf[strBufSize];
     while(1){
         printf("Enter string number\n");
         lineNumber = getLineNum();
         if(isStop(lineNumber)) return;
         if(isCorrectLineNum(lineNumber, linesNum)){
-            char currStrBuf[strBufSize];
             memset(currStrBuf, 0, strBufSize);
             lseek(fileDescriptor, offsets[lineNumber-1], SEEK_SET);
             read(fileDescriptor, currStrBuf, lineLength[lineNumber - 1]);
