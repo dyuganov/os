@@ -96,7 +96,6 @@ void printStringsToUser(const int fileDescriptor, const off_t* offsets, const si
         }
         else{
             printf("Wrong value\n");
-            break;
         }
     }
 }
