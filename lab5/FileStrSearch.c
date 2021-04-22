@@ -8,54 +8,90 @@ void initTable(void* table, const int value){
     memset(table, value, TABLE_SIZE);
 }
 
+bool isLseekError(const off_t lseekResult){
+    if(lseekResult == LSEEK_FAIL) {
+        perror("Lseek fail");
+        return true;
+    }
+    return false;
+}
+
+bool isOpenError(const int fileDescriptor){
+    if(fileDescriptor == FILE_OPEN_FAIL) {
+        perror("Open file fail");
+        return true;
+    }
+    return false;
+}
+
+bool isCloseError(const int closeResult){
+    if(closeResult == FILE_CLOSE_FAIL) {
+        perror("Close file fail");
+        return true;
+    }
+    return false;
+}
+
+bool isReadError(const ssize_t readResult){
+    if(readResult == READ_FAIL) {
+        perror("Read fail");
+        return true;
+    }
+    return false;
+}
+
+bool isReadEnd(const ssize_t readResult){
+    if(readResult == READ_END) return true;
+    return false;
+}
+
 int openFile(const char* fileName){
     int fileDescriptor = FILE_OPEN_FAIL;
     fileDescriptor = open(fileName, O_RDONLY);
-    if(fileDescriptor == FILE_OPEN_FAIL){
-        perror("Fail to open file");
-    }
+    if(isOpenError(fileDescriptor)) return FILE_OPEN_FAIL;
     return fileDescriptor;
 }
 
 int closeFile(int fileDescriptor){
-    int closeFileCheck = close(fileDescriptor);
-    if(closeFileCheck == FILE_CLOSE_FAIL){
-        perror("File close fail");
-        return EXIT_FAILURE;
-    }
+    int closeResult = close(fileDescriptor);
+    if(isCloseError(closeResult)) return EXIT_FAILURE;
     return EXIT_SUCCESS;
+}
+
+bool isLineEnd(const char symbol){
+    if(symbol == END_LINE_CHAR || symbol == EOF) return true;
+    return false;
+}
+
+bool isBigFile(const size_t linesNum){
+    if(linesNum >= TABLE_SIZE) {
+        perror("File is too big");
+        return true;
+    }
+    return false;
 }
 
 size_t createOffsetTable(off_t* offsets, size_t* lineLength, const int fileDescriptor){
     size_t linesNum = 0;
     size_t currLineLength = 0;
-    char tmp = 0;
-    ssize_t readResult = 0;
-    long lseekResult = 0;
-
+    char currChar = 0;
     offsets[0] = lseek(fileDescriptor, 0L, SEEK_CUR);
     while (NUM_NOT_NULL){
-        readResult = read(fileDescriptor, &tmp, READ_CNT);
-        if(readResult == READ_END) break;
-        if(tmp == END_LINE_CHAR || tmp == EOF){
+        ssize_t readResult = read(fileDescriptor, &currChar, READ_CNT);
+        if(isReadError(readResult)) return NO_LINES;
+        if(isReadEnd(readResult)) break;
+        if(isLineEnd(currChar)){
             ++currLineLength;
             lineLength[linesNum++] = currLineLength;
-            lseekResult = lseek(fileDescriptor, 0L, SEEK_CUR);
-            if(lseekResult == LSEEK_FAIL) {
-                perror("Lseek fail");
-                return 0;
-            }
+            long lseekResult = lseek(fileDescriptor, 0L, SEEK_CUR);
+            if(isLseekError(lseekResult)) return NO_LINES;
             offsets[linesNum] = lseekResult;
             currLineLength = 0;
         } else{
             ++currLineLength;
         }
-        if(linesNum >= TABLE_SIZE){
-            perror("File is too big");
-            return 0;
-        }
+        if(isBigFile(linesNum)) return NO_LINES;
     }
-
     return linesNum;
 }
 
@@ -67,33 +103,33 @@ size_t findLongestStrSize(const size_t* lineLength, const size_t linesNum){
     return max;
 }
 
-int isStop(int lineNumber){
-    return lineNumber == 0;
+bool isStop(const long long lineNumber){
+    return (lineNumber == 0);
 }
 
 long long getLineNum(){
     char lineNumber[LINE_NUM_SIZE];
     char* endPtr = NULL;
     int scanfResult = scanf("%s", lineNumber);
-    if(scanfResult == 0) return 0;
+    if(scanfResult == 0) return NO_LINES;
     long long result = strtoll(lineNumber, &endPtr, LLINT);
-    printf("strtoll res: %lld\n", result);
     return result;
 }
 
 void printStringsToUser(const int fileDescriptor, const off_t* offsets, const size_t* lineLength, const size_t linesNum){
     if(linesNum < 1) return;
     const size_t strBufSize = findLongestStrSize(lineLength, linesNum);
-    long long lineNumber = 0;
     char currStrBuf[strBufSize];
     while(1){
         printf("Enter string number\n");
-        lineNumber = getLineNum();
+        long long lineNumber = getLineNum();
         if(isStop(lineNumber)) return;
         if(isCorrectLineNum(lineNumber, linesNum)){
             memset(currStrBuf, 0, strBufSize);
-            lseek(fileDescriptor, offsets[lineNumber-1], SEEK_SET);
-            read(fileDescriptor, currStrBuf, lineLength[lineNumber - 1]);
+            int lseekResult = lseek(fileDescriptor, offsets[lineNumber-1], SEEK_SET);
+            if(isLseekError(lseekResult)) return;
+            int readResult = read(fileDescriptor, currStrBuf, lineLength[lineNumber - 1]);
+            if(isReadError(readResult)) return;
             printf("Your line: %s\n", currStrBuf);
         }
         else{

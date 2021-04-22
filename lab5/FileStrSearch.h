@@ -6,15 +6,18 @@
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 #define FILE_OPEN_FAIL (-1)
+#define FILE_CLOSE_FAIL (-1)
+#define READ_FAIL (-1)
 #define TABLE_SIZE (250)
 #define TABLE_STANDART_VAL (-1)
 #define READ_END (0)
+#define NO_LINES (0)
 #define END_LINE_CHAR ('\n')
 #define LSEEK_FAIL ((off_t)-1)
 #define FILE_ARG_IDX (1)
-#define FILE_CLOSE_FAIL (-1)
 #define READ_CNT (1)
 #define NUM_NOT_NULL (1)
 #define LLINT 0
