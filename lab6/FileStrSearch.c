@@ -107,19 +107,84 @@ bool isStop(const long long lineNumber){
     return (lineNumber == 0);
 }
 
+bool isSelectError(const int selectResult){
+    if(selectResult == SELECT_ERROR){
+        perror("Select error");
+        return true;
+    }
+    return false;
+}
+
+bool isDigit(char symbol){
+    if(symbol >= '0' && symbol <= '9') return true;
+    return false;
+}
+
+bool isNumber(const char* number, const size_t size){
+    for(size_t i = 0; i < size; ++i){
+        if(!isDigit(number[i])) return false;
+    }
+    return true;
+}
+
+bool isFgetsError(const char* fgetsResult){
+    if(fgetsResult == NULL) return true;
+    return false;
+}
+
 long long getLineNum(){
+    long long result = -1;
     char lineNumber[LINE_NUM_SIZE];
+    char* fgetsResult = fgets(lineNumber, LINE_NUM_SIZE, stdin);
+    if(isFgetsError(fgetsResult)) return result;
+
     char* endPtr = NULL;
-    int scanfResult = scanf("%s", lineNumber);
-    if(scanfResult == 0) return NO_LINES;
-    long long result = strtoll(lineNumber, &endPtr, LLINT);
+    size_t linesNumLength = strnlen(lineNumber, LINE_NUM_SIZE) - 1;
+    if(isNumber(lineNumber, linesNumLength)) result = strtoll(lineNumber, &endPtr, LLINT);
     return result;
 }
+
+int waitForInput(const int fileDescriptor){
+    char timeoutWarningMsg[] = "Five seconds to enter number: ";
+    char timeoutMsg[] = "Time is out. Your file:";
+
+    fd_set readDescriptors;
+    FD_ZERO(&readDescriptors);
+    FD_SET(STDIN_FILENO, &readDescriptors);
+
+    struct timeval timeout;
+    timeout.tv_sec = TIME_SEC;
+    timeout.tv_usec = TIME_USEC;
+
+    printf("%s\n", timeoutWarningMsg); // check
+
+    int selectResult = select(1, &readDescriptors, NULL, NULL, &timeout);
+    if (isSelectError(selectResult)) return EXIT_FAILURE;
+
+    if(selectResult == 0){
+        printf("%s", timeoutMsg);
+        return false;
+    }
+    return true;
+}
+
+int printFile(const int fileDescriptor){
+    printf("PRINT FILE\n");
+}
+
+
 
 void printStringsToUser(const int fileDescriptor, const off_t* offsets, const size_t* lineLength, const size_t linesNum){
     if(linesNum < 1) return;
     const size_t strBufSize = findLongestStrSize(lineLength, linesNum);
     char currStrBuf[strBufSize];
+
+    int waitRes = waitForInput(fileDescriptor);
+    if(waitRes == false){
+        printFile(fileDescriptor);
+        return;
+    }
+
     while(1){
         printf("Enter string number\n");
         long long lineNumber = getLineNum();

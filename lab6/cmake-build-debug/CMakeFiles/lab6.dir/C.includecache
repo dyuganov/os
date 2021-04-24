@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/Dyuga/Desktop/study_labs/os/lab6/FileStrSearch.c
+FileStrSearch.h
+C:/Users/Dyuga/Desktop/study_labs/os/lab6/FileStrSearch.h
+
+C:/Users/Dyuga/Desktop/study_labs/os/lab6/FileStrSearch.h
+sys/types.h
+-
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+fcntl.h
+-
+unistd.h
+-
+stdbool.h
+-
+sys/time.h
+-
+winsock.h
+-
+

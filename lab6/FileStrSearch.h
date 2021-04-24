@@ -7,6 +7,8 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <sys/time.h>
+#include <winsock.h>
 
 #define FILE_OPEN_FAIL (-1)
 #define FILE_CLOSE_FAIL (-1)
@@ -22,6 +24,10 @@
 #define NUM_NOT_NULL (1)
 #define LLINT 0
 #define LINE_NUM_SIZE 100
+#define TIME_SEC (5)
+#define TIME_USEC (0)
+#define SELECT_ERROR (-1)
+
 
 int isCorrectLineNum(size_t lineNumber, size_t linesNum);
 void initTable(void* table, int value);

@@ -107,12 +107,32 @@ bool isStop(const long long lineNumber){
     return (lineNumber == 0);
 }
 
+bool isDigit(char symbol){
+    if(symbol >= '0' && symbol <= '9') return true;
+    return false;
+}
+
+bool isNumber(const char* number, const size_t size){
+    for(size_t i = 0; i < size; ++i){
+        if(!isDigit(number[i])) return false;
+    }
+    return true;
+}
+
+bool isFgetsError(const char* fgetsResult){
+    if(fgetsResult == NULL) return true;
+    return false;
+}
+
 long long getLineNum(){
+    long long result = -1;
     char lineNumber[LINE_NUM_SIZE];
+    char* fgetsResult = fgets(lineNumber, LINE_NUM_SIZE, stdin);
+    if(isFgetsError(fgetsResult)) return result;
+
     char* endPtr = NULL;
-    int scanfResult = scanf("%s", lineNumber);
-    if(scanfResult == 0) return NO_LINES;
-    long long result = strtoll(lineNumber, &endPtr, LLINT);
+    size_t linesNumLength = strnlen(lineNumber, LINE_NUM_SIZE) - 1;
+    if(isNumber(lineNumber, linesNumLength)) result = strtoll(lineNumber, &endPtr, LLINT);
     return result;
 }
 
