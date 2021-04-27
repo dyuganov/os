@@ -11,7 +11,7 @@
 #define FILE_OPEN_FAIL (-1)
 #define FILE_CLOSE_FAIL (-1)
 #define READ_FAIL (-1)
-#define TABLE_SIZE (250)
+#define TABLE_SIZE (350)
 #define TABLE_STANDART_VAL (-1)
 #define READ_END (0)
 #define NO_LINES (0)

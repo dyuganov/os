@@ -82,7 +82,8 @@ size_t createOffsetTable(off_t* offsets, size_t* lineLength, const int fileDescr
         if(isReadEnd(readResult)) break;
         if(isLineEnd(currChar)){
             ++currLineLength;
-            lineLength[linesNum++] = currLineLength;
+            lineLength[linesNum] = currLineLength;
+            ++linesNum;
             long lseekResult = lseek(fileDescriptor, 0L, SEEK_CUR);
             if(isLseekError(lseekResult)) return NO_LINES;
             offsets[linesNum] = lseekResult;
