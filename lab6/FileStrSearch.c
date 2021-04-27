@@ -128,7 +128,10 @@ bool isNumber(const char* number, const size_t size){
 }
 
 bool isFgetsError(const char* fgetsResult){
-    if(fgetsResult == NULL) return true;
+    if(fgetsResult == NULL) {
+        perror("Fgets error");
+        return true;
+    }
     return false;
 }
 
@@ -156,7 +159,7 @@ int waitForInput(const int fileDescriptor){
     timeout.tv_sec = TIME_SEC;
     timeout.tv_usec = TIME_USEC;
 
-    printf("%s\n", timeoutWarningMsg); // check
+    printf("%s\n", timeoutWarningMsg);
 
     int selectResult = select(1, &readDescriptors, NULL, NULL, &timeout);
     if (isSelectError(selectResult)) return EXIT_FAILURE;
@@ -168,11 +171,25 @@ int waitForInput(const int fileDescriptor){
     return true;
 }
 
-int printFile(const int fileDescriptor){
-    printf("PRINT FILE\n");
+bool isPrintFileError(int printFileResult){
+    if(printFileResult == EXIT_FAILURE) {
+        perror("Print file error");
+        return true;
+    }
+    return false;
 }
 
-
+int printFile(const int fileDescriptor){
+    char currChar = 0;
+    int lseekResult = lseek(fileDescriptor, 0L, SEEK_SET);
+    if(isLseekError(lseekResult)) return EXIT_FAILURE;
+    while(currChar != EOF){
+        int readResult = read(fileDescriptor, &currChar, 1);
+        if(isReadError(readResult)) return EXIT_FAILURE;
+        printf("%c", currChar);
+    }
+    return EXIT_SUCCESS;
+}
 
 void printStringsToUser(const int fileDescriptor, const off_t* offsets, const size_t* lineLength, const size_t linesNum){
     if(linesNum < 1) return;
@@ -181,8 +198,7 @@ void printStringsToUser(const int fileDescriptor, const off_t* offsets, const si
 
     int waitRes = waitForInput(fileDescriptor);
     if(waitRes == false){
-        printFile(fileDescriptor);
-        return;
+        if(isPrintFileError(printFile(fileDescriptor))) return;
     }
 
     while(1){
