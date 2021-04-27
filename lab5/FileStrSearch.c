@@ -141,8 +141,8 @@ void printStringsToUser(const int fileDescriptor, const off_t* offsets, const si
     if(linesNum < 1) return;
     const size_t strBufSize = findLongestStrSize(lineLength, linesNum);
     char currStrBuf[strBufSize];
+    printf("Enter string number\n");
     while(1){
-        printf("Enter string number\n");
         long long lineNumber = getLineNum();
         if(isStop(lineNumber)) return;
         if(isCorrectLineNum(lineNumber, linesNum)){
@@ -151,7 +151,7 @@ void printStringsToUser(const int fileDescriptor, const off_t* offsets, const si
             if(isLseekError(lseekResult)) return;
             int readResult = read(fileDescriptor, currStrBuf, lineLength[lineNumber - 1]);
             if(isReadError(readResult)) return;
-            printf("Your line: %s\n", currStrBuf);
+            printf("%s", currStrBuf);
         }
         else{
             printf("Wrong value\n");

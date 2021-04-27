@@ -184,9 +184,10 @@ int printFile(const int fileDescriptor){
     char currChar = 0;
     int lseekResult = lseek(fileDescriptor, 0L, SEEK_SET);
     if(isLseekError(lseekResult)) return EXIT_FAILURE;
-    while(currChar != EOF){
-        int readResult = read(fileDescriptor, &currChar, 1);
+    while (NOT_FILE_END){
+        ssize_t readResult = read(fileDescriptor, &currChar, READ_CNT);
         if(isReadError(readResult)) return EXIT_FAILURE;
+        if(isReadEnd(readResult)) break;
         printf("%c", currChar);
     }
     return EXIT_SUCCESS;
@@ -202,8 +203,8 @@ void printStringsToUser(const int fileDescriptor, const off_t* offsets, const si
         if(isPrintFileError(printFile(fileDescriptor))) return;
     }
 
+    printf("Enter string number\n");
     while(1){
-        printf("Enter string number\n");
         long long lineNumber = getLineNum();
         if(isStop(lineNumber)) return;
         if(isCorrectLineNum(lineNumber, linesNum)){
@@ -212,7 +213,7 @@ void printStringsToUser(const int fileDescriptor, const off_t* offsets, const si
             if(isLseekError(lseekResult)) return;
             int readResult = read(fileDescriptor, currStrBuf, lineLength[lineNumber - 1]);
             if(isReadError(readResult)) return;
-            printf("Your line: %s\n", currStrBuf);
+            printf("%s", currStrBuf);
         }
         else{
             printf("Wrong value\n");

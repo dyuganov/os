@@ -22,6 +22,7 @@
 #define FILE_ARG_IDX (1)
 #define READ_CNT (1)
 #define NUM_NOT_NULL (1)
+#define NOT_FILE_END (1)
 #define LLINT 0
 #define LINE_NUM_SIZE 100
 #define TIME_SEC (5)
