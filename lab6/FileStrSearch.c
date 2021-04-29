@@ -75,7 +75,7 @@ size_t createOffsetTable(off_t* offsets, size_t* lineLength, const int fileDescr
     size_t linesNum = 0;
     size_t currLineLength = 0;
     char currChar = 0;
-    offsets[0] = lseek(fileDescriptor, 0L, SEEK_CUR);
+    offsets[0] = 0;
     while (NUM_NOT_NULL){
         ssize_t readResult = read(fileDescriptor, &currChar, READ_CNT);
         if(isReadError(readResult)) return NO_LINES;
@@ -148,10 +148,7 @@ long long getLineNum(){
     return result;
 }
 
-int waitForInput(const int fileDescriptor){
-    char timeoutWarningMsg[] = "Five seconds to enter number: ";
-    char timeoutMsg[] = "Time is out. Your file:";
-
+int waitForInput(){
     fd_set readDescriptors;
     FD_ZERO(&readDescriptors);
     FD_SET(STDIN_FILENO, &readDescriptors);
@@ -160,13 +157,10 @@ int waitForInput(const int fileDescriptor){
     timeout.tv_sec = TIME_SEC;
     timeout.tv_usec = TIME_USEC;
 
-    printf("%s\n", timeoutWarningMsg);
-
     int selectResult = select(1, &readDescriptors, NULL, NULL, &timeout);
     if (isSelectError(selectResult)) return EXIT_FAILURE;
 
     if(selectResult == 0){
-        printf("%s", timeoutMsg);
         return false;
     }
     return true;
@@ -197,14 +191,12 @@ void printStringsToUser(const int fileDescriptor, const off_t* offsets, const si
     if(linesNum < 1) return;
     const size_t strBufSize = findLongestStrSize(lineLength, linesNum);
     char currStrBuf[strBufSize];
-
-    int waitRes = waitForInput(fileDescriptor);
-    if(waitRes == false){
-        if(isPrintFileError(printFile(fileDescriptor))) return;
-    }
-
-    printf("Enter string number\n");
     while(1){
+        int waitRes = waitForInput();
+        if(waitRes == false){
+            if(isPrintFileError(printFile(fileDescriptor))) return;
+            return;
+        }
         long long lineNumber = getLineNum();
         if(isStop(lineNumber)) return;
         if(isCorrectLineNum(lineNumber, linesNum)){

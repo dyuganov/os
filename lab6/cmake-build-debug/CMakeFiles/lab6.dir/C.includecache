@@ -27,4 +27,16 @@ stdbool.h
 -
 sys/time.h
 -
+winsock.h
+-
+
+C:/Users/Dyuga/Desktop/study_labs/os/lab6/main.c
+stdio.h
+-
+stdlib.h
+-
+sys/types.h
+-
+FileStrSearch.h
+C:/Users/Dyuga/Desktop/study_labs/os/lab6/FileStrSearch.h
 
