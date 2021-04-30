@@ -28,6 +28,8 @@
 #define TIME_SEC (5)
 #define TIME_USEC (0)
 #define SELECT_ERROR (-1)
+#define TIME_OVER (0)
+#define TIME_NOT_OVER (1)
 
 int isCorrectLineNum(size_t lineNumber, size_t linesNum);
 void initTable(void* table, int value);

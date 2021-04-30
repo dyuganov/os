@@ -158,12 +158,12 @@ int waitForInput(){
     timeout.tv_usec = TIME_USEC;
 
     int selectResult = select(1, &readDescriptors, NULL, NULL, &timeout);
-    if (isSelectError(selectResult)) return EXIT_FAILURE;
+    if (isSelectError(selectResult)) return TIME_OVER;
 
     if(selectResult == 0){
-        return false;
+        return TIME_OVER;
     }
-    return true;
+    return TIME_NOT_OVER;
 }
 
 bool isPrintFileError(int printFileResult){
@@ -192,9 +192,9 @@ void printStringsToUser(const int fileDescriptor, const off_t* offsets, const si
     const size_t strBufSize = findLongestStrSize(lineLength, linesNum);
     char currStrBuf[strBufSize];
     while(1){
-        int waitRes = waitForInput();
-        if(waitRes == false){
-            if(isPrintFileError(printFile(fileDescriptor))) return;
+        int waitResult = waitForInput();
+        if(waitResult == TIME_OVER){
+            isPrintFileError(printFile(fileDescriptor));
             return;
         }
         long long lineNumber = getLineNum();
