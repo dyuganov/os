@@ -12,9 +12,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7d0dd7b6-77d8-48fe-9705-7ea9159272ad" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../lab9/.idea/lab9.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FileStrSearch.c" beforeDir="false" afterPath="$PROJECT_DIR$/FileStrSearch.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FileStrSearch.h" beforeDir="false" afterPath="$PROJECT_DIR$/FileStrSearch.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -76,7 +74,7 @@
       <workItem from="1619440922520" duration="5383000" />
       <workItem from="1619494217896" duration="3000" />
       <workItem from="1619494294661" duration="549000" />
-      <workItem from="1619513998370" duration="10271000" />
+      <workItem from="1619513998370" duration="11173000" />
     </task>
     <servers />
   </component>

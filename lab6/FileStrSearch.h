@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <sys/time.h>
+//#include <sys/select.h>
 #include <winsock.h> // for Windows only
 
 #define FILE_OPEN_FAIL (-1)
