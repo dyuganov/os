@@ -65,7 +65,7 @@ bool isLineEnd(const char symbol){
 
 bool isBigFile(const size_t linesNum){
     if(linesNum >= TABLE_SIZE) {
-        perror("File is too big");
+        fprintf(stderr, "File is too big. Table size is %d\n", TABLE_SIZE);
         return true;
     }
     return false;
@@ -130,7 +130,7 @@ bool isNumber(const char* number, const size_t size){
 
 bool isFgetsError(const char* fgetsResult){
     if(fgetsResult == NULL) {
-        perror("Fgets error");
+        fprintf(stderr, "Fgets error\n");
         return true;
     }
     return false;
@@ -157,9 +157,9 @@ int waitForInput(){
     timeout.tv_sec = TIME_SEC;
     timeout.tv_usec = TIME_USEC;
 
-    int selectResult = select(1, &readDescriptors, NULL, NULL, &timeout);
+    int selectResult = select(1, &readDescriptors, NULL, NULL, &timeout);//
     if (isSelectError(selectResult)) return TIME_OVER;
-
+//
     if(selectResult == 0){
         return TIME_OVER;
     }
@@ -168,7 +168,7 @@ int waitForInput(){
 
 bool isPrintFileError(int printFileResult){
     if(printFileResult == EXIT_FAILURE) {
-        perror("Print file error");
+        fprintf(stderr, "Print file error\n");
         return true;
     }
     return false;
@@ -208,7 +208,7 @@ void printStringsToUser(const int fileDescriptor, const off_t* offsets, const si
             printf("%s", currStrBuf);
         }
         else{
-            printf("Wrong value\n");
+            fprintf(stderr, "Wrong value. Max line num is %u\n", linesNum);
         }
     }
 }

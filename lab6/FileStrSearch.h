@@ -8,13 +8,17 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <sys/time.h>
-//#include <sys/select.h>
-#include <winsock.h> // for Windows only
+
+#ifdef __unix__
+#include <sys/select.h>
+#elif defined(_WIN32) || defined(WIN32)
+#include <winsock.h>
+#endif
 
 #define FILE_OPEN_FAIL (-1)
 #define FILE_CLOSE_FAIL (-1)
 #define READ_FAIL (-1)
-#define TABLE_SIZE (350)
+#define TABLE_SIZE (500)
 #define TABLE_STANDART_VAL (-1)
 #define READ_END (0)
 #define NO_LINES (0)
