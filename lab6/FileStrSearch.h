@@ -35,6 +35,7 @@
 #define SELECT_ERROR (-1)
 #define TIME_OVER (0)
 #define TIME_NOT_OVER (1)
+#define SELECT_FAIL (2)
 
 int isCorrectLineNum(size_t lineNumber, size_t linesNum);
 void initTable(void* table, int value);

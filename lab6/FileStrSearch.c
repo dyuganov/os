@@ -152,18 +152,16 @@ int waitForInput(){
     fd_set readDescriptors;
     FD_ZERO(&readDescriptors);
     FD_SET(STDIN_FILENO, &readDescriptors);
-
+    int selectResult = -1;
     struct timeval timeout;
     timeout.tv_sec = TIME_SEC;
     timeout.tv_usec = TIME_USEC;
-
-    int selectResult = select(1, &readDescriptors, NULL, NULL, &timeout);//
-    if (isSelectError(selectResult)) return TIME_OVER;
-//
-    if(selectResult == 0){
-        return TIME_OVER;
+    if(FD_ISSET(STDIN_FILENO, &readDescriptors)) {
+        selectResult = select(STDIN_FILENO + 1, &readDescriptors, NULL, NULL, &timeout);
     }
-    return TIME_NOT_OVER;
+    if (isSelectError(selectResult)) return SELECT_FAIL;
+    if(selectResult == 0) return TIME_OVER;
+    if(FD_ISSET(STDIN_FILENO, &readDescriptors)) return TIME_NOT_OVER;
 }
 
 bool isPrintFileError(int printFileResult){
@@ -195,6 +193,9 @@ void printStringsToUser(const int fileDescriptor, const off_t* offsets, const si
         int waitResult = waitForInput();
         if(waitResult == TIME_OVER){
             isPrintFileError(printFile(fileDescriptor));
+            return;
+        }
+        if(waitResult == SELECT_FAIL){
             return;
         }
         long long lineNumber = getLineNum();
