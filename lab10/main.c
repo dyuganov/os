@@ -6,12 +6,15 @@
 #include <wait.h>
 #include <stdbool.h>
 
-#define FORK_ERROR (-1)
+//#define FORK_ERROR (-1)
 #define COMMAND_NAME_IDX (1)
 #define CHILD_PROC_EXIT_ERROR (0)
+#define WAIT_ERROR (-1)
+#define CHILD_PROC (0)
+#define EXECVP_ERROR (-1)
 
 bool isForkError(const int forkResult){
-    if(forkResult == FORK_ERROR){
+    if(forkResult < 0){
         perror("Fork error");
         return true;
     }
@@ -43,24 +46,33 @@ bool isChildProcFinished(const int status){
     return true;
 }
 
-
+bool isExecvpError(const int execvpResult){
+    if(execvpResult == EXECVP_ERROR){
+        perror("execvp error");
+        return true;
+    }
+    return false;
+}
 
 int main(int argc, char *argv[]) {
     if(isWrongArgsNum(argc)) return 0;
-    int status;
+    int status = 0, execvpResult = 0;
     int forkResult = fork();
     if(isForkError(forkResult)) return 0;
-	if (forkResult == 0) {
-        execvp(argv[COMMAND_NAME_IDX], &argv[COMMAND_NAME_IDX]);
-		perror(argv[1]);
-		exit(127);
+	if (forkResult == CHILD_PROC) {
+        execvpResult = execvp(argv[COMMAND_NAME_IDX], &argv[COMMAND_NAME_IDX]);
+        if(isExecvpError(execvpResult)) return 0;
+        //perror(argv[1]);
+		//exit(127);
 	}
-    pid_t waitResult = 0;
-	waitResult = wait(&status);
-    if(isChildProcFinished(status) && !isProcFinishedWithSignal(status)) {
+    pid_t waitResult = wait(&status);
+    if(isChildProcFinished(status)) {
+        if(isProcFinishedWithSignal(status)){
+            return 0;
+        }
         int exitStatus = WEXITSTATUS(status);
         printf("Exit status: %d\n", exitStatus);
     }
-    
     return 0;
 }
+
