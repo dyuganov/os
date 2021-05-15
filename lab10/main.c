@@ -59,14 +59,13 @@ bool isSignalInterrupted(const int status){
 
 void printSignalNum(const int status){
     int signalNumber = WTERMSIG(status);
-    printf("Terminated by signal number: %d\n", signalNumber);
-    if(WCOREDUMP(status)) printf("Core-file was created.\n");
+    fprintf(stderr, "Terminated by signal number: %d\n", signalNumber);
+    if(WCOREDUMP(status)) fprintf(stderr, "Core-file was created.\n");
 }
 
 int main(int argc, char *argv[]) {
     if(isWrongArgsNum(argc)) return 0;
     int status = 0, execvpResult = 0;
-    pid_t waitResult = 0;
 
     int forkResult = fork();
     if(isForkError(forkResult)) return 0;
@@ -74,7 +73,7 @@ int main(int argc, char *argv[]) {
         execvpResult = execvp(argv[COMMAND_NAME_IDX], &argv[COMMAND_NAME_IDX]);
         if(isExecvpError(execvpResult)) return 0;
 	}
-    waitResult = wait(&status);
+    pid_t waitResult = wait(&status);
 	if(isWaitError(waitResult)) return 0;
     if(isChildProcFinished(status)) printExitStatus(status);
     if(isSignalInterrupted(status)) printSignalNum(status);
