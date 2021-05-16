@@ -5,6 +5,7 @@
 
 #define COMMAND_NAME_IDX (1)
 #define EXECVP_ERROR (-1)
+#define END_OF_ARGS (NULL)
 
 extern char** environ;
 
@@ -38,7 +39,7 @@ int execvpe(char *fileName, char *argv[], char *envp[]) {
 
 int main (int argc, char *argv[], char *envp[]){
     if(isWrongArgsNum(argc)) return 0;
-    char *new_envp[2] = { "PATH=/home/students/19200/n.dyuganov/lab11/prog", NULL };
+    char *new_envp[2] = { "PATH=/home/students/19200/n.dyuganov/lab11/prog", END_OF_ARGS };
     execvpe(argv[COMMAND_NAME_IDX], &argv[COMMAND_NAME_IDX], new_envp);
     return 0;
 }

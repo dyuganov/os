@@ -1,0 +1,889 @@
+a file. In this case, the standard input was connected to the terminal in which you ran cat .NOT EPressing ctrl -D on an empty line stops the current standard input entry from theterminal (and often terminates a program). Don't confuse this with crl -C, which
+terminates a program regardless of its input or output.
+Standard output is similar. The kernel gives each process a standard
+output stream where it can write its output. The cat command always writes
+its output to the standard output. When you ran cat in the terminal, the
+standard output was connected to that terminal, so that's where you saw the
+output.
+Standard input and output are often abbreviated as stdin and stdout.
+Many commands operate as cat does; if you don't specify an input file, the
+command reads from stdin. Output is a little different. Some commands
+(like cat ) send output only to stdout, but others have the option to send
+output directly to files.
+There is a third standard I/O stream called standard error. You'll see it
+in Section 2.14.1.
+One of the best features of standard streams is that you can easily
+manipulate them to read and write to places other than the terminal,
+as you'll learn in Section 2.14. In particular, you'll learn how to connect
+streams to files and other processes.
+2.3
+Basic Commands
+Now let's look at some more Unix commands. Most of the following pro-
+grams take multiple arguments, and some have so many options and for-
+mats that an unabridged listing would be pointless. This is a simplified list
+of the basic commands; you don't need all of the details just yet.
+2.3.1
+ls
+The ls command lists the contents of a directory. The default is the cur-
+rent directory. Use ls -l for a detailed (long) listing and ls -F to display file
+type information. (For more on the file types and permissions displayed
+in the left column below, see Section 2.17.) Here is a sample long listing; it
+includes the owner of the file (column 3), the group (column 4), the file
+size (column 5), and the modification date/time (between column 5 and
+the filename):
+$ ls -l
+total 3616
+-rw-r--r--
+-rw-r--r--
+14     Chapter 2
+1 juser
+1 juser
+users
+users
+3804 Apr 30
+4165 May 26
+2011 abusive.c
+2010 battery.zip-rw-r--r--
+-rw-r--r--
+drwxr-xr-x
+-rwxr-xr-x
+-rw-r--r--
+-rw-r--r--
+drwxr-xr-x
+drwxr-xr-x
+1
+1
+2
+1
+1
+1
+6
+3
+juser
+juser
+juser
+juser
+juser
+juser
+juser
+juser
+users
+users
+users
+users
+users
+users
+users
+users
+131219
+6255
+4096
+7108
+11309
+56
+4096
+4096
+Oct
+May
+Jul
+Feb
+Oct
+Oct
+Feb
+May
+26 2012 beav_1.40-13.tar.gz
+30 2010 country.c
+17 20:00 cs335
+2 2011 dhry
+20 2010 dhry.c
+6 2012 doit
+20 13:51 dw
+2 2011 hough-stuff
+You'll learn more about the d in column 1 of this output in Section 2.17.
+2.3.2
+cp
+In its simplest form, cp copies files. For example, to copy file1 to file2 ,
+enter this:
+$ cp file1 file2
+To copy a number of files to a directory (folder) named dir , try this instead:
+$ cp file1 ... fileN dir
+2.3.3
+mv
+The mv (move) command is like cp . In its simplest form, it renames a file. For
+example, to rename file1 to file2 , enter this:
+$ mv file1 file2
+You can also use mv to move a number of files to a different directory:
+$ mv file1 ... fileN dir
+2.3.4
+touch
+The touch command creates a file. If the file already exists, touch does not
+change it, but it does update the file's modification time stamp printed with
+the ls -l command. For example, to create an empty file, enter this:
+$ touch file
+Then run ls -l on that file. You should see output like the following,
+where the date and time u indicate when you ran touch :
+$ ls -l file
+-rw-r--r-- 1 juser users 0 May 21 18:32u file
+Basic Commands and Directory Hierarchy     152.3.5
+rm
+To delete (remove) a file, use rm . After you remove a file, it's gone from your
+system and generally cannot be undeleted.
+$ rm file
+2.3.6
+echo
+The echo command prints its arguments to the standard output:
+$ echo Hello again.
+Hello again.
+The echo command is very useful for finding expansions of shell globs
+("wildcards" such as * ) and variables (such as $HOME ), which you will encoun-
+ter later in this chapter.
+2.4
+Navigating Directories
+Unix has a directory hierarchy that starts at /, sometimes called the root
+directory. The directory separator is the slash (/), not the backslash (\).
+There are several standard subdirectories in the root directory, such as
+/usr, as you'll learn in Section 2.19.
+When you refer to a file or directory, you specify a path or pathname.
+When a path starts with / (such as /usr/lib), it's a full or absolute path.
+A path component identified by two dots (..) specifies the parent of a
+directory. For example, if you're working in /usr/lib, the path .. would refer
+to /usr. Similarly, ../bin would refer to /usr/bin.
+One dot (.) refers to the current directory; for example, if you're in
+/usr/lib, the path . is still /usr/lib, and ./X11 is /usr/lib/X11. You won't have
+to use . very often because most commands default to the current directory
+if a path doesn't start with / (you could just use X11 instead of ./X11 in the
+preceding example).
+A path not beginning with / is called a relative path. Most of the time,
+you'll work with relative pathnames, because you'll already be in the direc-
+tory you need to be in or somewhere close by.
+Now that you have a sense of the basic directory mechanics, here are
+some essential directory commands.
+2.4.1
+cd
+The current working directory is the directory that a process (such as the shell) is
+currently in. The cd command changes the shell's current working directory:
+$ cd dir
+16     Chapter 2If you omit dir , the shell returns to your home directory, the directory you
+started in when you first logged in.
+2.4.2
+mkdir
+The mkdir command creates a new directory dir :
+$ mkdir dir
+2.4.3
+rmdir
+The rmdir command removes the directory dir :
+$ rmdir dir
+If dir isn't empty, this command fails. However, if you're impatient, you
+probably don't want to laboriously delete all the files and subdirectories
+inside dir first. You can use rm -rf dir to delete a directory and its contents,
+but be careful! This is one of the few commands that can do serious dam-
+age, especially if you run it as the superuser. The -r option specifies recursive
+delete to repeatedly delete everything inside dir , and -f forces the delete
+operation. Don't use the -rf flags with globs such as a star ( * ). And above
+all, always double-check your command before you run it.
+2.4.4 Shell Globbing (Wildcards)
+The shell can match simple patterns to file and directory names, a process
+known as globbing. This is similar to the concept of wildcards in other sys-
+tems. The simplest of these is the glob character * , which tells the shell to
+match any number of arbitrary characters. For example, the following com-
+mand prints a list of files in the current directory:
+$ echo *
+The shell matches arguments containing globs to filenames, substitutes
+the filenames for those arguments, and then runs the revised command
+line. The substitution is called expansion because the shell substitutes all
+matching filenames. Here are some ways to use * to expand filenames:
+o
+o
+o
+at* expands to all filenames that start with at .
+*at expands to all filenames that end with at .
+*at* expands to all filenames that contain at .
+If no files match a glob, the shell performs no expansion, and the com-
+mand runs with literal characters such as *. For example, try a command
+such as echo *dfkdsafh .
+Basic Commands and Directory Hierarchy     17NOT E
+If you're used to MS-DOS, you might instinctively type *.* to match all files. Break
+this habit now. In Linux and other versions of Unix, you must use * to match all
+files. In the Unix shell, *.* matches only files and directories that contain the dot ( . )
+character in their names. Unix filenames do not need extensions and often do not
+carry them.
+Another shell glob character, the question mark ( ? ), instructs the shell
+to match exactly one arbitrary character. For example, b?at matches boat
+and brat .
+If you don't want the shell to expand a glob in a command, enclose
+the glob in single quotes ( '' ). For example, the command echo '*' prints
+a star. You will find this handy for a few of the commands described in the
+next section, such as grep and find . (You'll learn more much about quoting
+in Section 11.2.)
+NOT E
+It is important to remember that the shell performs expansions before running com-
+mands, and only then. Therefore, if a * makes it to a command without expanding,
+the shell will do nothing more with it; it's up to the command to decide what it wants
+to do.
+There is more to a modern shell's pattern-matching capabilities, but *
+and ? are what you need to know now.
+2.5
+Intermediate Commands
+The following sections describe the most essential intermediate Unix
+commands.
+2.5.1
+grep
+The grep command prints the lines from a file or input stream that match
+an expression. For example, to print the lines in the /etc/passwd file that
+contain the text root , enter this:
+$ grep root /etc/passwd
+The grep command is extraordinarily handy when operating on mul-
+tiple files at once because it prints the filename in addition to the matching
+line. For example, if you want to check every file in /etc that contains the
+word root , you could use this command:
+$ grep root /etc/*
+Two of the most important grep options are -i (for case-insensitive
+matches) and -v (which inverts the search, that is, prints all lines that don't
+match). There is also a more powerful variant called egrep (which is just a
+synonym for grep -E ).
+18     Chapter 2grep understands patterns known as regular expressions that are grounded
+in computer science theory and are very common in Unix utilities. Regular
+expressions are more powerful than wildcard-style patterns, and they have a
+different syntax. There are two important things to remember about regular
+expressions:
+o
+o
+NOT E
+.* matches any number of characters (like the * in wildcards).
+. matches one arbitrary character.
+The grep(1) manual page contains a detailed description of regular expressions, but
+it can be a little difficult to read. To learn more, you can read Mastering Regular
+Expressions, 3rd edition (O'Reilly, 2006), or see the regular expressions chapter of
+Programming Perl, 4th edition (O'Reilly, 2012). If you like math and are inter-
+ested in where regular expressions come from, look up Introduction to Automata
+Theory, Languages, and Computation, 3rd edition (Prentice Hall, 2006).
+2.5.2
+less
+The less command comes in handy when a file is really big or when a com-
+mand's output is long and scrolls off the top of the screen.
+To page through a big file like /usr/share/dict/words, use the command
+less /usr/share/dict/words . When running less , you'll see the contents of the
+file one screenful at a time. Press the spacebar to go forward in the file and
+the b key to skip back one screenful. To quit, type q.
+NOT E
+The less command is an enhanced version of an older program named more . Most
+Linux desktops and servers have less , but it's not standard on many embedded sys-
+tems and other Unix systems. So if you ever run into a situation when you can't use
+less , try more .
+You can also search for text inside less . For example, to search forward
+for a word, type /word , and to search backward, use ?word . When you find a
+match, press n to continue searching.
+As you'll learn in Section 2.14, you can send the standard output of
+nearly any program directly to another program's standard input. This is
+exceptionally useful when you have a command with a lot of output to sift
+through and you'd like to use something like less to view the output. Here's
+an example of sending the output of a grep command to less :
+$ grep ie /usr/share/dict/words | less
+Try this command out for yourself. You'll probably use less like this
+a lot.
+2.5.3
+pwd
+The pwd (print working directory) program simply outputs the name of the
+current working directory. You may be wondering why you need this when
+Basic Commands and Directory Hierarchy     19most Linux distributions set up accounts with the current working directory
+in the prompt. There are two reasons.
+First, not all prompts include the current working directory, and you
+may even want to get rid of it in your own prompt because it takes up a lot
+of space. If you do so, you need pwd .
+Second, the symbolic links that you'll learn about in Section 2.17.2 can
+sometimes obscure the true full path of the current working directory.
+You'll use pwd -P to eliminate this confusion.
+2.5.4
+diff
+To see the differences between two text files, use diff :
+$ diff file1 file2
+Several options can control the format of the output, and the default
+output format is often the most comprehensible for human beings. However,
+most programmers prefer the output from diff -u when they need to send
+the output to someone else because automated tools can make better use
+of it.
+2.5.5
+file
+If you see a file and are unsure of its format, try using the file command to
+see if the system can guess:
+$ file file
+You may be surprised by how much this innocent-looking command
+can do.
+2.5.6
+find and locate
+It's frustrating when you know that a certain file is in a directory tree some-
+where but you just don't know where. Run find to find file in dir :
+$ find dir -name file -print
+Like most programs in this section, find is capable of some fancy stuff.
+However, don't try options such as -exec before you know the form shown
+here by heart and why you need the -name and -print options. The find
+command accepts special pattern-matching characters such as *, but you
+must enclose them in single quotes ( '*' )to protect the special characters
+from the shell's own globbing feature. (Recall from Section 2.4.4 that the
+shell expands globs before running commands.)
+Most systems also have a locate command for finding files. Rather than
+searching for a file in real time, locate searches an index that the system
+builds periodically. Searching with locate is much faster than find , but if the
+file you're looking for is newer than the index, locate won't find it.
+20     Chapter 22.5.7
+head and tail
+To quickly view a portion of a file or stream of data, use the head and tail
+commands. For example, head /etc/passwd shows the first 10 lines of the
+password file, and tail /etc/passwd shows the last 10 lines.
+To change the number of lines to display, use the -n option, where n is
+the number of lines you want to see (for example, head -5 /etc/passwd ). To
+print lines starting at line n , use tail +n .
+2.5.8
+sort
+The sort command quickly puts the lines of a text file in alphanumeric
+order. If the file's lines start with numbers and you want to sort in numeri-
+cal order, use the -n option. The -r option reverses the order of the sort.
+2.6
+Changing Your Password and Shell
+Use the passwd command to change your password. You'll be asked for your
+old password and then prompted for your new password twice. Choose a
+password that does not include real words in any language and don't try to
+combine words.
+One of the easiest ways to create a good password is to pick a sentence,
+produce an acronym from it, and then modify the acronym with a number
+or some punctuation. Then all you need to do is remember the sentence.
+You can change your shell with the chsh command (to an alternative
+such as ksh or tcsh ), but keep in mind that this book assumes that you're
+running bash .
+2.7
+Dot Files
+Change to your home directory, take a look around with ls , and then run
+ls -a . Do you see the difference in the output? When you run ls without the
+-a , you won't see the configuration files called dot files. These are files and
+directories whose names begin with a dot ( . ). Common dot files are .bashrc
+and .login, and there are dot directories, too, such as .ssh.
+There is nothing special about dot files or directories. Some programs
+don't show them by default so that you won't see a complete mess when list-
+ing the contents of your home directory. For example, ls doesn't list dot
+files unless you use the -a option. In addition, shell globs don't match
+dot files unless you explicitly use a pattern such as .* .
+NOT E
+2.8
+You can run into problems with globs because .* matches . and .. (the current and
+parent directories). You may wish to use a pattern such as .[^.]* or .??* to get all
+dot files except the current and parent directories.
+Environment and Shell Variables
+The shell can store temporary variables, called shell variables, containing
+the values of text strings. Shell variables are very useful for keeping track of
+Basic Commands and Directory Hierarchy     21values in scripts, and some shell variables control the way the shell behaves.
+(For example, the bash shell reads the PS1 variable before displaying the
+prompt.)
+To assign a value to a shell variable, use the equal sign ( = ). Here's a
+simple example:
+$ STUFF=blah
+The preceding example sets the value of the variable named STUFF
+to blah . To access this variable, use $STUFF (for example, try running echo
+$STUFF ). You'll learn about the many uses of shell variables in Chapter 11.
+An environment variable is like a shell variable, but it's not specific to the
+shell. All processes on Unix systems have environment variable storage. The
+main difference between environment and shell variables is that the operat-
+ing system passes all of your shell's environment variables to programs that
+the shell runs, whereas shell variables cannot be accessed in the commands
+that you run.
+Assign an environment variable with the shell's export command. For
+example, if you'd like to make the $STUFF shell variable into an environment
+variable, use the following:
+$ STUFF=blah
+$ export STUFF
+Environment variables are useful because many programs read them
+for configuration and options. For example, you can put your favorite less
+command-line options in the LESS environment variable, and less will use
+those options when you run it. (Many manual pages contain a section
+marked ENVIRONMENT that describes these variables.)
+2.9
+The Command Path
+PATH is a special environment variable that contains the command path (or
+path for short). A command path is a list of system directories that the shell
+searches when trying to locate a command. For example, when you run ls ,
+the shell searches the directories listed in PATH for the ls program. If pro-
+grams with the same name appear in several directories in the path, the
+shell runs the first matching program.
+If you run echo $PATH , you'll see that the path components are separated
+by colons ( : ). For example:
+$ echo $PATH
+/usr/local/bin:/usr/bin:/bin
+To tell the shell to look in more places for programs, change the PATH
+environment variable. For example, by using this command, you can add
+a directory dir to the beginning of the path so that the shell looks in dir
+before looking in any of the other PATH directories.
+22     Chapter 2$ PATH=dir:$PATH
+Or you can append a directory name to the end of the PATH variable,
+causing the shell to look in dir last:
+$ PATH=$PATH:dir
+NOT E
+2.10
+Be careful when modifying the path because you can accidentally wipe out your entire
+path if you mistype $PATH . If this happens, don't panic! The damage isn't permanent;
+you can just start a new shell. (For a lasting effect, you need to mistype it when editing
+a certain configuration file, and even then it isn't difficult to rectify.) One of the easiest
+ways to return to normal is to close the current terminal window and start another.
+Special Characters
+When discussing Linux with others, you should know a few names for some
+of the special characters that you'll encounter. If you're amused by this
+sort of thing, see the "Jargon File" (http://www.catb.org/jargon/html/) or its
+printed companion, The New Hacker's Dictionary (MIT Press, 1996).
+Table 2-1 describes a select set of the special characters, many of which
+you've already seen in this chapter. Some utilities, such as the Perl program-
+ming language, use almost all of these special characters! (Keep in mind
+that these are the American names for the characters.)
+Table 2-1: Special Characters
+Character Name(s) Uses
+* asterisk, star Regular expression, glob character
+. dot Current directory, file/hostname delimiter
+! bang Negation, command history
+| pipe Command pipes
+/ (forward) slash Directory delimiter, search command
+\ backslash Literals, macros (never directories)
+$ dollar Variable denotation, end of line
+' tick, (single) quote Literal strings
+` backtick, backquote Command substitution
+" double quote Semi-literal strings
+^ caret Negation, beginning of line
+~ tilde, squiggle Negation, directory shortcut
+# hash, sharp, pound Comments, preprocessor, substitutions
+[ ] (square) brackets Ranges
+{ } braces, (curly) brackets Statement blocks, ranges
+_ underscore, under Cheap substitute for a space
+Basic Commands and Directory Hierarchy     23NOT E
+2.11
+You will often see control characters marked with a caret; for example, ^C for ctrl -C.
+Command-Line Editing
+As you play with the shell, notice that you can edit the command line using
+the left and right arrow keys, as well as page through previous commands
+using the up and down arrows. This is standard on most Linux systems.
+However, it's a good idea to forget about the arrow keys and use control
+key sequences instead. If you learn the ones listed in Table 2-2, you'll find
+that you're better able to enter text in the many Unix programs that use
+these standard keystrokes.
+Table 2-2: Command-Line Keystrokes
+2.12
+Keystroke Action
+ctrl -B Move the cursor left
+ctrl -F Move the cursor right
+ctrl -P View the previous command (or move the cursor up)
+ctrl -N View the next command (or move the cursor down)
+ctrl -A Move the cursor to the beginning of the line
+ctrl -E Move the cursor to the end of the line
+ctrl -W Erase the preceding word
+ctrl -U Erase from cursor to beginning of line
+ctrl -K Erase from cursor to end of line
+ctrl -Y Paste erased text (for example, from
+ctrl -U)
+Text Editors
+Speaking of editing, it's time to learn an editor. To get serious with Unix, you
+must be able to edit text files without damaging them. Most parts of the sys-
+tem use plaintext configuration files (like the ones in /etc). It's not difficult to
+edit files, but you will do it so often that you need a powerful tool for the job.
+You should try to learn one of the two de facto standard Unix text edi-
+tors, vi and Emacs. Most Unix wizards are religious about their choice of
+editor, but don't listen to them. Just choose for yourself. If you choose one
+that matches the way that you work, you'll find it easier to learn. Basically,
+the choice comes down to this:
+o
+o
+24     Chapter 2
+If you want an editor that can do almost anything and has extensive
+online help, and you don't mind doing some extra typing to get these
+features, try Emacs.
+If speed is everything, give vi a shot; it "plays" a bit like a video game.Learning the vi and Vim Editors: Unix Text Processing, 7th edition (O'Reilly,
+2008) can tell you everything you need to know about vi. For Emacs, use
+the online tutorial: Start Emacs, press ctrl -H, and then type T. Or read
+GNU Emacs Manual (Free Software Foundation, 2011).
+You might be tempted to experiment with a friendlier editor when you
+first start out, such as Pico or one of the myriad GUI editors out there, but
+if you tend to make a habit out of the first thing that you use, you don't want
+to go down this route.
+NOT E
+Editing text is where you'll first start to see a difference between the terminal and
+the GUI. Editors such as vi run inside the terminal window, using the standard
+terminal I/O interface. GUI editors start their own window and present their own
+interface, independent of terminals. Emacs runs in a GUI by default but will run in
+a terminal window as well.
+2.13 Getting Online Help
+Linux systems come with a wealth of documentation. For basic commands,
+the manual pages (or man pages) will tell you what you need to know. For
+example, to see the manual page for the ls command, run man as follows:
+$ man ls
+Most manual pages concentrate primarily on reference information,
+perhaps with some examples and cross-references, but that's about it. Don't
+expect a tutorial, and don't expect an engaging literary style.
+When programs have many options, the manual page often lists the
+options in some systematic way (for example, in alphabetical order), but it
+won't tell you what the important ones are. If you're patient, you can usu-
+ally find what you need to know in the man page. If you're impatient, ask a
+friend--or pay someone to be your friend so that you can ask him or her.
+To search for a manual page by keyword, use the -k option:
+$ man -k keyword
+This is helpful if you don't quite know the name of the command that
+you want. For example, if you're looking for a command to sort some-
+thing, run:
+$ man -k sort
+--snip--
+comm (1)
+qsort (3)
+sort (1)
+sortm (1)
+tsort (1)
+--snip--
+-
+-
+-
+-
+-
+compare two sorted files line by line
+sorts an array
+sort lines of text files
+sort messages
+perform topological sort
+Basic Commands and Directory Hierarchy     25The output includes the manual page name, the manual section (see
+below), and a quick description of what the manual page contains.
+NOT E
+If you have any questions about the commands described in the previous sections, you
+may be able to find the answers by using the man command.
+Manual pages are referenced by numbered sections. When someone
+refers to a manual page, the section number appears in parentheses next
+to the name, like ping(8), for example. Table 2-3 lists the sections and their
+numbers.
+Table 2-3: Online Manual Sections
+Section Description
+1 User commands
+2 System calls
+3 Higher-level Unix programming library documentation
+4 Device interface and driver information
+5 File descriptions (system configuration files)
+6 Games
+7 File formats, conventions, and encodings (ASCII, suffixes, and so on)
+8 System commands and servers
+Sections 1, 5, 7, and 8 should be good supplements to this book. Section 4
+may be of marginal use, and Section 6 would be great if only it were a little
+larger. You probably won't be able to use Section 3 if you aren't a program-
+mer, but you may be able to understand some of the material in Section 2
+once you've read more about system calls in this book.
+You can select a manual page by section, which is sometimes important
+because man displays the first manual page that it finds when matching a
+particular search term. For example, to read the /etc/passwd file description
+(as opposed to the passwd command), you can insert the section number
+before the page name:
+$ man 5 passwd
+Manual pages cover the essentials, but there are many more ways to get
+online help. If you're just looking for a certain option for a command, try
+entering a command name followed by --help or -h (the option varies from
+command to command). You may get a deluge (as in the case of ls --help ),
+or you may find just what you're looking for.
+Some time ago, the GNU Project decided that it didn't like manual
+pages very much and switched to another format called info (or texinfo).
+Often this documentation goes further than a typical manual page does,
+26     Chapter 2but it is sometimes more complex. To access an info manual, use info with
+the command name:
+$ info command
+Some packages dump their available documentation into /usr/share/doc
+with no regard for online manual systems such as man or info . See this direc-
+tory on your system if you find yourself searching for documentation. And
+of course, search the Internet.
+2.14
+Shell Input and Output
+Now that you're familiar with basic Unix commands, files, and directories,
+you're ready to learn how to redirect standard input and output. Let's start
+with standard output.
+To send the output of command to a file instead of the terminal, use the >
+redirection character:
+$ command > file
+The shell creates file if it does not already exist. If file exists, the shell
+erases (clobbers) the original file first. (Some shells have parameters that
+prevent clobbering. For example, enter set -C to avoid clobbering in bash .)
+You can append the output to the file instead of overwriting it with the
+>> redirection syntax:
+$ command >> file
+This is a handy way to collect output in one place when executing
+sequences of related commands.
+To send the standard output of a command to the standard input of
+another command, use the pipe character ( | ). To see how this works, try
+these two commands:
+$ head /proc/cpuinfo
+$ head /proc/cpuinfo | tr a-z A-Z
+You can send output through as many piped commands as you wish;
+just add another pipe before each additional command.
+2.14.1
+Standard Error
+Occasionally, you may redirect standard output but find that the pro-
+gram still prints something to the terminal. This is called standard error
+(stderr); it's an additional output stream for diagnostics and debugging.
+For example, this command produces an error:
+$ ls /fffffffff > f
+Basic Commands and Directory Hierarchy     27After completion, f should be empty, but you still see the following
+error message on the terminal as standard error:
+ls: cannot access /fffffffff: No such file or directory
+You can redirect the standard error if you like. For example, to
+send standard output to f and standard error to e, use the 2> syntax,
+like this:
+$ ls /fffffffff > f 2> e
+The number 2 specifies the stream ID that the shell modifies. Stream ID
+1 is standard output (the default), and 2 is standard error.
+You can also send the standard error to the same place as stdout with
+the >& notation. For example, to send both standard output and standard
+error to the file named f, try this command:
+$ ls /fffffffff > f 2>&1
+2.14.2
+Standard Input Redirection
+To channel a file to a program's standard input, use the < operator:
+$ head < /proc/cpuinfo
+You will occasionally run into a program that requires this type of redi-
+rection, but because most Unix commands accept filenames as arguments,
+this isn't very common. For example, the preceding command could have
+been written as head /proc/cpuinfo .
+2.15
+Understanding Error Messages
+When you encounter a problem on a Unix-like system such as Linux, you
+must read the error message. Unlike messages from other operating sys-
+tems, Unix errors usually tell you exactly what went wrong.
+2.15.1
+Anatomy of a UNIX Error Message
+Most Unix programs generate and report the same basic error messages,
+but there can be subtle differences between the output of any two pro-
+grams. Here's an example that you'll certainly encounter in some form
+or other:
+$ ls /dsafsda
+ls: cannot access /dsafsda: No such file or directory
+28     Chapter 2There are three components to this message:
+o
+o
+o
+The program name, ls . Some programs omit this identifying informa-
+tion, which can be annoying when writing shell scripts, but it's not
+really a big deal.
+The filename, /dsafsda , which is a more specific piece of information.
+There's a problem with this path.
+The error No such file or directory indicates the problem with the
+filename.
+Putting it all together, you get something like " ls tried to open /dsafsda
+but couldn't because it doesn't exist." This may seem obvious, but these
+messages can get a little confusing when you run a shell script that includes
+an erroneous command under a different name.
+When troubleshooting errors, always address the first error first. Some
+programs report that they can't do anything before reporting a host of
+other problems. For example, say you run a fictitious program called scumd
+and you see this error message:
+scumd: cannot access /etc/scumd/config: No such file or directory
+Following this is a huge list of other error messages that looks like a
+complete catastrophe. Don't let those other errors distract you. You prob-
+ably just need to create /etc/scumd/config.
+NOT E
+Don't confuse error messages with warning messages. Warnings often look like errors,
+but they contain the word warning. A warning usually means something is wrong but
+the program will try to continue running anyway. To fix a problem noted in a warning
+message, you may have to hunt down a process and kill it before doing anything else.
+(You'll learn about listing and killing processes in Section 2.16.)
+2.15.2
+Common Errors
+Many errors that you'll encounter in Unix programs result from things that
+can go wrong with files and processes. Here's an error message hit parade:
+No such file or directory
+This is the number one error. You tried to access a file that doesn't exist.
+Because the Unix file I/O system doesn't discriminate between files and
+directories, this error message occurs everywhere. You get it when you try
+to read a file that does not exist, when you try to change to a directory that
+isn't there, when you try to write to a file in a directory that doesn't exist,
+and so on.
+File exists
+In this case, you probably tried to create a file that already exists. This is
+common when you try to create a directory with the same name as a file.
+Basic Commands and Directory Hierarchy     29Not a directory, Is a directory
+These messages pop up when you try to use a file as a directory or a direc-
+tory as a file. For example:
+$ touch a
+$ touch a/b
+touch: a/b: Not a directory
+Notice that the error message only applies to the a part of a/b . When
+you encounter this problem, you may need to dig around a little to find the
+path component that is being treated like a directory.
+No space left on device
+You're out of disk space.
+Permission denied
+You get this error when you attempt to read or write to a file or directory
+that you're not allowed to access (you have insufficient privileges). This
+error also shows when you try to execute a file that does not have the exe-
+cute bit set (even if you can read the file). You'll read more about permis-
+sions in Section 2.17.
+Operation not permitted
+This usually happens when you try to kill a process that you don't own.
+Segmentation fault, Bus error
+A segmentation fault essentially means that the person who wrote the pro-
+gram that you just ran screwed up somewhere. The program tried to access
+a part of memory that it was not allowed to touch, and the operating system
+killed it. Similarly, a bus error means that the program tried to access some
+memory in a particular way that it shouldn't. When you get one of these
+errors, you might be giving a program some input that it did not expect.
+2.16
+Listing and Manipulating Processes
+Recall from Chapter 1 that a process is a running program. Each process on
+the system has a numeric process ID (PID). For a quick listing of running pro-
+cesses, just run ps on the command line. You should get a list like this one:
+$ ps
+PID TTY STAT
+520 p0 S
+545
+? S
+548
+? S
+2159 pd SW
+31956 p3 R
+30     Chapter 2
+TIME
+0:00
+3:59
+0:10
+0:00
+0:00
+COMMAND
+-bash
+/usr/X11R6/bin/ctwm -W
+xclock -geometry -0-0
+/usr/bin/vi lib/addresses
+psThe fields are as follows:
+PID The process ID.
+TTY The terminal device where the process is running. More about
+this later.
+STAT The process status, that is, what the process is doing and where
+its memory resides. For example, S means sleeping and R means run-
+ning. (See the ps(1) manual page for a description of all the symbols.)
+TIME The amount of CPU time in minutes and seconds that the pro-
+cess has used so far. In other words, the total amount of time that the
+process has spent running instructions on the processor.
+COMMAND This one might seem obvious, but be aware that a pro-
+cess can change this field from its original value.
+2.16.1
+Command Options
+The ps command has many options. To make things more confusing, you
+can specify options in three different styles--Unix, BSD, and GNU. Many
+people find the BSD style to be the most comfortable (perhaps because it
+involves less typing), so we'll use the BSD style in this book. Here are some
+of the most useful option combinations:
+Show all of your running processes.
+ps ax Show all processes on the system, not just the ones you own.
+ps u Include more detailed information on processes.
+ps w Show full command names, not just what fits on one line.
+ps x
+As with other programs, you can combine options, as in ps aux and ps auxw .
+To check on a specific process, add its PID to the argument list of the
+ps command. For example, to inspect the current shell process, you could
+use ps u $$ , because $$ is a shell variable that evaluates to the current shell's
+PID. (You'll find information on the administration commands top and lsof
+in Chapter 8. These can be useful for locating processes, even when doing
+something other than system maintenance.)
+2.16.2
+Killing Processes
+To terminate a process, send it a signal with the kill command. A signal is a
+message to a process from the kernel. When you run kill , you're asking the
+kernel to send a signal to another process. In most cases, all you need to do
+is this:
+$ kill pid
+There are many types of signals. The default is TERM , or terminate. You
+can send different signals by adding an extra option to kill . For example, to
+freeze a process instead of terminating it, use the STOP signal:
+$ kill -STOP pid
+Basic Commands and Directory Hierarchy     31A stopped process is still in memory, ready to pick up where it left off.
+Use the CONT signal to continue running the process again:
+$ kill -CONT pid
+NOT E
+Using ctrl -C to terminate a process that is running in the current terminal is the
+same as using kill to end the process with the INT (interrupt) signal.
+The most brutal way to terminate a process is with the KILL signal.
+Other signals give the process a chance to clean up after itself, but KILL
+does not. The operating system terminates the process and forcibly removes
+it from memory. Use this as a last resort.
+You should not kill processes indiscriminately, especially if you don't
+know what they're doing. You may be shooting yourself in the foot.
+You may see other users entering numbers instead of names with kill ;
+for example, kill -9 instead of kill -KILL . This is because the kernel uses
+numbers to denote the different signals; you can use kill this way if you
+know the number of the signal that you want to send.
+2.16.3
+Job Control
+Shells also support job control, which is a way to send TSTP (similar to STOP )
+and CONT signals to programs by using various keystrokes and commands. For
+example, you can send a TSTP signal with ctrl -Z, then start the process again
+by entering fg (bring to foreground) or bg (move to background; see the next
+section). But despite its utility and the habits of many experienced users, job
+control is not necessary and can be confusing for beginners: It's common for
+users to press ctrl -Z instead of ctrl -C, forget about what they were running,
+and eventually end up with numerous suspended processes hanging around.
+Hint:
+To see if you've accidentally suspended any processes on your current terminal, run
+the jobs command.
+If you want to run multiple shells, run each program in a separate
+terminal window, put noninteractive processes in the background (as
+explained in the next section), or learn to use the screen program.
+2.16.4
+Background Processes
+Normally, when you run a Unix command from the shell, you don't get
+the shell prompt back until the program finishes executing. However, you
+can detach a process from the shell and put it in the "background" with
+the ampersand ( & ); this gives you the prompt back. For example, if you
+have a large file that you need to decompress with gunzip (you'll see this in
+Section 2.18), and you want to do some other stuff while it's running, run a
+command like this one:
+$ gunzip file.gz &
+32     Chapter 2The shell should respond by printing the PID of the new background
+process, and the prompt should return immediately so that you can con-
+tinue working. The process will continue to run after you log out, which
+comes in particularly handy if you have to run a program that does a lot of
+number crunching for a while. (Depending on your setup, the shell might
+notify you when the process completes.)
+The dark side of running background processes is that they may expect
+to work with the standard input (or worse, read directly from the terminal).
+If a program tries to read something from the standard input when it's in
+the background, it can freeze (try fg to bring it back) or terminate. Also,
+if the program writes to the standard output or standard error, the output
+can appear in the terminal window with no regard for anything else run-
+ning there, meaning that you can get unexpected output when you're work-
+ing on something else.
+The best way to make sure that a background process doesn't bother
+you is to redirect its output (and possibly input) as described in Section 2.14.
+If spurious output from background processes gets in your way, learn
+how to redraw the content of your terminal window. The bash shell and
+most full-screen interactive programs support ctrl -L to redraw the entire
+screen. If a program is reading from the standard input, ctrl -R usually
+redraws the current line, but pressing the wrong sequence at the wrong
+time can leave you in an even worse situation than before. For example,
+entering ctrl -R at the bash prompt puts you in reverse isearch mode (press
+esc to exit).
+2.17
+File Modes and Permissions
+Every Unix file has a set of permissions that determine whether you can read,
+write, or run the file. Running ls -l displays the permissions. Here's an
+example of such a display:
+-rw-r--r--u 1 juser
+somegroup
+7041 Mar 26 19:34 endnotes.html
+The file's mode u represents
+the file's permissions and some
+extra information. There are four
+parts to the mode, as illustrated in
+Figure 2-1.
+The first character of the mode
+is the file type. A dash ( - ) in this posi-
+tion, as in the example, denotes
+a regular file, meaning that there's
+nothing special about the file. This is
+by far the most common kind of file.
+Directories are also common and are
+indicated by a d in the file type slot.
+(Section 3.1 lists the remaining file
+types.)
+Type
+User permissions
+Group permissions
+Other permissions
+-rw-r--r--
+Figure 2-1: The pieces of a file mode
+Basic Commands and Directory Hierarchy     33The rest of a file's mode contains the permissions, which break down into
+three sets: user, group, and other, in that order. For example, the rw- characters
+in the example are the user permissions, the r-- characters that follow are the
+group permissions, and the final r-- characters are the other permissions.
+Each permission set can contain four basic representations:
+x Means that the

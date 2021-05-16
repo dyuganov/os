@@ -9,10 +9,10 @@
 #define FORK_ERROR (-1)
 #define COMMAND_NAME_IDX (1)
 #define WAIT_ERROR (-1)
-#define CHILD_PROC (0)
+#define CHILD_PROCESS (0)
 #define EXECVP_ERROR (-1)
 
-bool isForkError(const int forkResult){
+bool isForkError(const pid_t forkResult){
     if(forkResult == FORK_ERROR){
         perror("Fork error");
         return true;
@@ -21,7 +21,8 @@ bool isForkError(const int forkResult){
 }
 
 bool isWrongArgsNum(const int argc){
-    if(argc < 2) {
+    const int MIN_ARGS_NUM = 2;
+    if(argc < MIN_ARGS_NUM) {
         fprintf(stderr, "Wrong args number\n");
         return true;
     }
@@ -67,9 +68,9 @@ int main(int argc, char *argv[]) {
     if(isWrongArgsNum(argc)) return 0;
     int status = 0, execvpResult = 0;
 
-    int forkResult = fork();
+    pid_t forkResult = fork();
     if(isForkError(forkResult)) return 0;
-	if (forkResult == CHILD_PROC) {
+	if (forkResult == CHILD_PROCESS) {
         execvpResult = execvp(argv[COMMAND_NAME_IDX], &argv[COMMAND_NAME_IDX]);
         if(isExecvpError(execvpResult)) return 0;
 	}

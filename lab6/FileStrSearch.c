@@ -159,7 +159,7 @@ int waitForInput(){
     if(FD_ISSET(STDIN_FILENO, &readDescriptors)) {
         selectResult = select(STDIN_FILENO + 1, &readDescriptors, NULL, NULL, &timeout);
     }
-    if (isSelectError(selectResult)) return SELECT_FAIL;
+    if(isSelectError(selectResult)) return SELECT_FAIL;
     if(selectResult == 0) return TIME_OVER;
     if(FD_ISSET(STDIN_FILENO, &readDescriptors)) return TIME_NOT_OVER;
 }
