@@ -50,15 +50,12 @@ int main(int argc, char* argv[]) {
 
     pid_t forkResult = fork();
     if(isForkError(forkResult)) return 0;
-
     if (forkResult == CHILD_PROCESS) {
         int execlResult = execl("/bin/cat", "cat", argv[1], END_OF_ARGS);
         if(isExeclError(execlResult)) return 0;
     }
-
     pid_t waitResult = wait(STATUS_IGNORE);
     if(isWaitError(waitResult)) return 0;
 
-    printf("Text written by parent\n");
     return EXIT_SUCCESS;
 }
