@@ -39,7 +39,7 @@ int execvpe(char *fileName, char *argv[], char *envp[]) {
 
 int main (int argc, char *argv[], char *envp[]){
     if(isWrongArgsNum(argc)) return 0;
-    char *new_envp[2] = { "PATH=/home/students/19200/n.dyuganov/lab11/prog", END_OF_ARGS };
-    execvpe(argv[COMMAND_NAME_IDX], &argv[COMMAND_NAME_IDX], new_envp);
+    char *newEnvp[2] = { "PATH=/home/students/19200/n.dyuganov/lab11/prog", END_OF_ARGS };
+    execvpe(argv[COMMAND_NAME_IDX], &argv[COMMAND_NAME_IDX], newEnvp);
     return 0;
 }
