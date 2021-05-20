@@ -7,7 +7,6 @@
 
 #define ARGS_NUM (2)
 #define END_OF_ARGS (NULL)
-#define STATUS_IGNORE (NULL)
 #define FORK_ERROR (-1)
 #define WAIT_ERROR (-1)
 #define CHILD_PROCESS (0)
@@ -54,8 +53,9 @@ int main(int argc, char* argv[]) {
         int execlResult = execl("/bin/cat", "cat", argv[1], END_OF_ARGS);
         if(isExeclError(execlResult)) return 0;
     }
-    pid_t waitResult = wait(STATUS_IGNORE);
+    pid_t waitResult = wait(NULL);
     if(isWaitError(waitResult)) return 0;
+    printf("Text written by parent\n");
 
-    return EXIT_SUCCESS;
+    return 0;
 }
