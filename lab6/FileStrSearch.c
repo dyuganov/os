@@ -204,15 +204,16 @@ void printStringsToUser(const int fileDescriptor, const off_t* offsets, const si
         if(inputWaitResult == SELECT_FAIL) return;
         long long lineNumber = getLineNum();
         if(isStop(lineNumber)) return;
-        if(!isCorrectLineNum(lineNumber, linesNum)){
-            fprintf(stderr, "Wrong value. Max line num is %u\n", linesNum);
-            return;
+        if(isCorrectLineNum(lineNumber, linesNum)){
+            memset(currStrBuf, 0, strBufSize);
+            int lseekResult = lseek(fileDescriptor, offsets[lineNumber-1], SEEK_SET);
+            if(isLseekError(lseekResult)) return;
+            int readResult = read(fileDescriptor, currStrBuf, lineLength[lineNumber - 1]);
+            if(isReadError(readResult)) return;
+            printf("%s", currStrBuf);
         }
-        memset(currStrBuf, 0, strBufSize);
-        int lseekResult = lseek(fileDescriptor, offsets[lineNumber-1], SEEK_SET);
-        if(isLseekError(lseekResult)) return;
-        int readResult = read(fileDescriptor, currStrBuf, lineLength[lineNumber - 1]);
-        if(isReadError(readResult)) return;
-        printf("%s", currStrBuf);
+        else{
+            fprintf(stderr, "Wrong value. Max line num is %u\n", linesNum);
+        }
     }
 }
