@@ -148,20 +148,25 @@ long long getLineNum(){
     return result;
 }
 
+void initTimeval(struct timeval* timeout){
+    timeout->tv_sec = TIME_SEC;
+    timeout->tv_usec = TIME_USEC;
+}
+
 int waitForInput(){
     fd_set readDescriptors;
     FD_ZERO(&readDescriptors);
     FD_SET(STDIN_FILENO, &readDescriptors);
-    int selectResult = -1;
     struct timeval timeout;
-    timeout.tv_sec = TIME_SEC;
-    timeout.tv_usec = TIME_USEC;
-    if(FD_ISSET(STDIN_FILENO, &readDescriptors)) {
-        selectResult = select(STDIN_FILENO + 1, &readDescriptors, NULL, NULL, &timeout);
-    }
+    initTimeval(&timeout);
+    int selectResult = select(STDIN_FILENO + 1, &readDescriptors, NULL, NULL, &timeout);
     if(isSelectError(selectResult)) return SELECT_FAIL;
+    if(FD_ISSET(STDIN_FILENO, &readDescriptors) == false) {
+        fprintf(stderr, "FD was not set");
+        return FD_NOT_SET;
+    }
     if(selectResult == 0) return TIME_OVER;
-    if(FD_ISSET(STDIN_FILENO, &readDescriptors)) return TIME_NOT_OVER;
+    return READY_TO_GET_NUM;
 }
 
 bool isPrintFileError(int printFileResult){
@@ -190,26 +195,24 @@ void printStringsToUser(const int fileDescriptor, const off_t* offsets, const si
     const size_t strBufSize = findLongestStrSize(lineLength, linesNum);
     char currStrBuf[strBufSize];
     while(1){
-        int waitResult = waitForInput();
-        if(waitResult == TIME_OVER){
+        int inputWaitResult = 0;
+        inputWaitResult = waitForInput();
+        if(inputWaitResult == TIME_OVER || inputWaitResult == FD_NOT_SET){
             isPrintFileError(printFile(fileDescriptor));
             return;
         }
-        if(waitResult == SELECT_FAIL){
-            return;
-        }
+        if(inputWaitResult == SELECT_FAIL) return;
         long long lineNumber = getLineNum();
         if(isStop(lineNumber)) return;
-        if(isCorrectLineNum(lineNumber, linesNum)){
-            memset(currStrBuf, 0, strBufSize);
-            int lseekResult = lseek(fileDescriptor, offsets[lineNumber-1], SEEK_SET);
-            if(isLseekError(lseekResult)) return;
-            int readResult = read(fileDescriptor, currStrBuf, lineLength[lineNumber - 1]);
-            if(isReadError(readResult)) return;
-            printf("%s", currStrBuf);
-        }
-        else{
+        if(!isCorrectLineNum(lineNumber, linesNum)){
             fprintf(stderr, "Wrong value. Max line num is %u\n", linesNum);
+            return;
         }
+        memset(currStrBuf, 0, strBufSize);
+        int lseekResult = lseek(fileDescriptor, offsets[lineNumber-1], SEEK_SET);
+        if(isLseekError(lseekResult)) return;
+        int readResult = read(fileDescriptor, currStrBuf, lineLength[lineNumber - 1]);
+        if(isReadError(readResult)) return;
+        printf("%s", currStrBuf);
     }
 }
