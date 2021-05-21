@@ -196,7 +196,7 @@ void printStringsToUser(const int fileDescriptor, const off_t* offsets, const si
     while(1){
         int inputWaitResult = 0;
         inputWaitResult = waitForInput();
-        if(inputWaitResult == TIME_OVER || inputWaitResult == FD_NOT_SET){
+        if(inputWaitResult == TIME_OVER){
             isPrintFileError(printFile(fileDescriptor));
             return;
         }
