@@ -75,27 +75,27 @@ include CMakeFiles/lab9.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/lab9.dir/flags.make
 
-CMakeFiles/lab9.dir/main.c.obj: CMakeFiles/lab9.dir/flags.make
-CMakeFiles/lab9.dir/main.c.obj: ../main.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\Dyuga\Desktop\study_labs\os\lab9\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/lab9.dir/main.c.obj"
-	C:\PROGRA~2\MINGW-~1\I686-8~1.0-P\mingw32\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\lab9.dir\main.c.obj -c C:\Users\Dyuga\Desktop\study_labs\os\lab9\main.c
+CMakeFiles/lab9.dir/main1.c.obj: CMakeFiles/lab9.dir/flags.make
+CMakeFiles/lab9.dir/main1.c.obj: ../main1.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\Dyuga\Desktop\study_labs\os\lab9\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/lab9.dir/main1.c.obj"
+	C:\PROGRA~2\MINGW-~1\I686-8~1.0-P\mingw32\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\lab9.dir\main1.c.obj -c C:\Users\Dyuga\Desktop\study_labs\os\lab9\main1.c
 
-CMakeFiles/lab9.dir/main.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/lab9.dir/main.c.i"
-	C:\PROGRA~2\MINGW-~1\I686-8~1.0-P\mingw32\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Dyuga\Desktop\study_labs\os\lab9\main.c > CMakeFiles\lab9.dir\main.c.i
+CMakeFiles/lab9.dir/main1.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/lab9.dir/main1.c.i"
+	C:\PROGRA~2\MINGW-~1\I686-8~1.0-P\mingw32\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Dyuga\Desktop\study_labs\os\lab9\main1.c > CMakeFiles\lab9.dir\main1.c.i
 
-CMakeFiles/lab9.dir/main.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/lab9.dir/main.c.s"
-	C:\PROGRA~2\MINGW-~1\I686-8~1.0-P\mingw32\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Dyuga\Desktop\study_labs\os\lab9\main.c -o CMakeFiles\lab9.dir\main.c.s
+CMakeFiles/lab9.dir/main1.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/lab9.dir/main1.c.s"
+	C:\PROGRA~2\MINGW-~1\I686-8~1.0-P\mingw32\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Dyuga\Desktop\study_labs\os\lab9\main1.c -o CMakeFiles\lab9.dir\main1.c.s
 
 # Object files for target lab9
 lab9_OBJECTS = \
-"CMakeFiles/lab9.dir/main.c.obj"
+"CMakeFiles/lab9.dir/main1.c.obj"
 
 # External object files for target lab9
 lab9_EXTERNAL_OBJECTS =
 
-lab9.exe: CMakeFiles/lab9.dir/main.c.obj
+lab9.exe: CMakeFiles/lab9.dir/main1.c.obj
 lab9.exe: CMakeFiles/lab9.dir/build.make
 lab9.exe: CMakeFiles/lab9.dir/linklibs.rsp
 lab9.exe: CMakeFiles/lab9.dir/objects1.rsp

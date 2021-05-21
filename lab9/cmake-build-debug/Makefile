@@ -141,32 +141,32 @@ lab9/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab9.dir\build.make CMakeFiles/lab9.dir/build
 .PHONY : lab9/fast
 
-main.obj: main.c.obj
+main1.obj: main1.c.obj
 
-.PHONY : main.obj
+.PHONY : main1.obj
 
 # target to build an object file
-main.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab9.dir\build.make CMakeFiles/lab9.dir/main.c.obj
-.PHONY : main.c.obj
+main1.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab9.dir\build.make CMakeFiles/lab9.dir/main1.c.obj
+.PHONY : main1.c.obj
 
-main.i: main.c.i
+main1.i: main1.c.i
 
-.PHONY : main.i
+.PHONY : main1.i
 
 # target to preprocess a source file
-main.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab9.dir\build.make CMakeFiles/lab9.dir/main.c.i
-.PHONY : main.c.i
+main1.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab9.dir\build.make CMakeFiles/lab9.dir/main1.c.i
+.PHONY : main1.c.i
 
-main.s: main.c.s
+main1.s: main1.c.s
 
-.PHONY : main.s
+.PHONY : main1.s
 
 # target to generate assembly for a file
-main.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab9.dir\build.make CMakeFiles/lab9.dir/main.c.s
-.PHONY : main.c.s
+main1.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab9.dir\build.make CMakeFiles/lab9.dir/main1.c.s
+.PHONY : main1.c.s
 
 # Help Target
 help:
@@ -177,9 +177,9 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... lab9
-	@echo ... main.obj
-	@echo ... main.i
-	@echo ... main.s
+	@echo ... main1.obj
+	@echo ... main1.i
+	@echo ... main1.s
 .PHONY : help
 
 
