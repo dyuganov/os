@@ -158,14 +158,13 @@ int waitForInput(){
     FD_ZERO(&readDescriptors);
     FD_SET(STDIN_FILENO, &readDescriptors);
     struct timeval timeout;
-    initTimeval(&timeout);
-    int selectResult = select(STDIN_FILENO + 1, &readDescriptors, NULL, NULL, &timeout);
-    if(isSelectError(selectResult)) return SELECT_FAIL;
-    if(FD_ISSET(STDIN_FILENO, &readDescriptors) == false) {
-        fprintf(stderr, "FD was not set");
-        return FD_NOT_SET;
-    }
-    if(selectResult == 0) return TIME_OVER;
+    do{
+        initTimeval(&timeout);
+        int selectResult = select(STDIN_FILENO + 1, &readDescriptors, NULL, NULL, &timeout);
+        if(isSelectError(selectResult)) return SELECT_FAIL;
+        if(selectResult == 0) return TIME_OVER;
+    } while (!FD_ISSET(STDIN_FILENO, &readDescriptors));
+
     return READY_TO_GET_NUM;
 }
 
