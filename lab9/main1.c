@@ -7,7 +7,6 @@
 
 #define ARGS_NUM (2)
 #define END_OF_ARGS (NULL)
-#define STATUS_IGNORE (NULL)
 #define FORK_ERROR (-1)
 #define WAIT_ERROR (-1)
 #define CHILD_PROCESS (0)

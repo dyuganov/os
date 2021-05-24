@@ -6,13 +6,13 @@
 #define COMMAND_NAME_IDX (1)
 #define EXECVP_ERROR (-1)
 #define END_OF_ARGS (NULL)
+#define ARGS_NUM (2)
 
 extern char** environ;
 
 bool isWrongArgsNum(const int argc){
-    const int MIN_ARGS_NUM = 2;
-    if(argc < MIN_ARGS_NUM) {
-        fprintf(stderr, "Wrong args number\n");
+    if(argc != ARGS_NUM){
+        fprintf(stderr, "Wrong args num\n");
         return true;
     }
     return false;
@@ -20,7 +20,7 @@ bool isWrongArgsNum(const int argc){
 
 bool isExecvpError(const int execvpResult){
     if(execvpResult == EXECVP_ERROR){
-        perror("Execvpe error");
+        perror("execvp error");
         return true;
     }
     return false;
@@ -39,7 +39,7 @@ int execvpe(char *fileName, char *argv[], char *envp[]) {
 
 int main (int argc, char *argv[], char *envp[]){
     if(isWrongArgsNum(argc)) return 0;
-    char *newEnvp[2] = { "PATH=/home/students/19200/n.dyuganov/lab11/prog", END_OF_ARGS };
+    char *newEnvp[2] = { "PATH=/home/students/19200/n.dyuganov/lab11/folder", END_OF_ARGS };
     execvpe(argv[COMMAND_NAME_IDX], &argv[COMMAND_NAME_IDX], newEnvp);
     return 0;
 }
