@@ -6,7 +6,7 @@
 #include <glob.h>
 #include <stdbool.h>
 
-#define MAX_PATTERN_SIZE (256)
+#define MAX_PATTERN_SIZE (512)
 #define NOT_END_OF_INPUT (1)
 #define GLOB_SUCCESS (0)
 #define ARGS_NUM (1)
@@ -26,7 +26,7 @@ bool isStopSign(const char currentSymbol){
     return false;
 }
 
-bool isShortPattern(const int patternLength){
+bool isEmptyPattern(const int patternLength){
     if (patternLength == 0) {
         fprintf(stderr, "Wrong input. The pattern can't be empty\n");
         return true;
@@ -50,6 +50,14 @@ bool isWrongArgsNum(const int argc){
     return false;
 }
 
+bool isLongPattern(const int patternLength){
+    if(patternLength >= MAX_PATTERN_SIZE - 1){
+        fprintf(stderr, "Too long pattern\n");
+        return true;
+    }
+    return false;
+}
+
 int readPattern(char* pattern) {
     int patternLength = 0;
     while (NOT_END_OF_INPUT) {
@@ -58,8 +66,9 @@ int readPattern(char* pattern) {
         //if (isSlash(currentSymbol)) return EXIT_FAILURE;
         pattern[patternLength] = currentSymbol;
         patternLength++;
+        if(isLongPattern(patternLength)) return EXIT_FAILURE;
     }
-    if (isShortPattern(patternLength)) return EXIT_FAILURE;
+    if (isEmptyPattern(patternLength)) return EXIT_FAILURE;
     pattern[patternLength] = '\0';
     return EXIT_SUCCESS;
 }
@@ -85,4 +94,3 @@ int main(int argc, char* argv[]) {
     if (printFileNames(pattern) == EXIT_FAILURE) return 0;
     return 0;
 }
-
