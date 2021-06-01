@@ -19,6 +19,13 @@ bool isSlash(const char currentSymbol) {
     return false;
 }
 
+bool containsSlash(const char* pattern){
+    char* strchrResult = strchr(pattern, '/');
+    if(strchrResult == NULL) return false;
+    fprintf(stderr, "Symbol '/' is not allowed\n");
+    return true;
+}
+
 bool isStopSign(const char currentSymbol){
     if (currentSymbol == EOF || currentSymbol == '\n') {
         return true;
@@ -63,12 +70,13 @@ int readPattern(char* pattern) {
     while (NOT_END_OF_INPUT) {
         char currentSymbol = (char)fgetc(stdin);
         if (isStopSign(currentSymbol)) break;
-        if (isSlash(currentSymbol)) return EXIT_FAILURE;
+        //if (isSlash(currentSymbol)) return EXIT_FAILURE;
         pattern[patternLength] = currentSymbol;
         ++patternLength;
         if(isLongPattern(patternLength)) return EXIT_FAILURE;
     }
     if (isEmptyPattern(patternLength)) return EXIT_FAILURE;
+    if(containsSlash(pattern)) return EXIT_FAILURE;
     pattern[patternLength] = '\0';
     return EXIT_SUCCESS;
 }
